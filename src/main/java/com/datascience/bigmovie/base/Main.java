@@ -3,11 +3,13 @@ package com.datascience.bigmovie.base;
 import java.io.*;
 import java.net.URL;
 import java.util.StringTokenizer;
+import java.io.FileWriter;
 
 public class Main {
     public static void main(String[] args) {
-        //Array with location of current raw data
-        String[] rawDataPaths = {"name.basics.tsv/data", "title.akas.tsv/data", "title.basics.tsv/data"};
+        // Array with location of current raw data, uncomment this to test all files
+        // String[] rawDataPaths = {"name.basics.tsv/data", "title.akas.tsv/data", "title.basics.tsv/data", "title.crew.tsv/data", "title.episode.tsv/data", "title.principals.tsv/data", "title.ratings.tsv/data"};
+        String[] rawDataPaths = {"name.basics.tsv/data"};
 
         try {
             convertTSVToCSVFile(rawDataPaths);
@@ -28,17 +30,17 @@ public class Main {
         for (String rawDataPath : rawDataPaths) {
             // Get file from resources folder
             File file = getFileFromResources("database/raw/" + rawDataPath + ".tsv");
+            String newFilePath = "src/main/resources/database/csv/" + rawDataPath.split(".tsv/")[0] + ".csv";
 
             //Try to read the existing data and write it to a new csv file
             try (BufferedReader br = new BufferedReader(new FileReader(file));
-                 PrintWriter writer = new PrintWriter(new FileWriter("database/csv/" + rawDataPath + ".csv"))) {
+                 PrintWriter writer = new PrintWriter(new FileWriter(newFilePath))) {
 
                 int i = 0;
                 for (String line; (line = br.readLine()) != null; ) {
                     i++;
                     if (i % 10000 == 0) {
                         System.out.println("Processed: " + i);
-
                     }
                     tokenizer = new StringTokenizer(line, "\t");
 
@@ -47,6 +49,8 @@ public class Main {
                     while (tokenizer.hasMoreTokens()) {
                         token = tokenizer.nextToken().replaceAll("\"", "'");
                         csvLine += "\"" + token + "\",";
+                        System.out.println(line);
+
                     }
 
                     if (csvLine.endsWith(",")) {
@@ -77,9 +81,4 @@ public class Main {
 
     }
 
-    private static String convertToCSV(String line) {
-        String csv = "";
-        line = line.replaceAll("\t", ",");
-        return line;
-    }
 }
