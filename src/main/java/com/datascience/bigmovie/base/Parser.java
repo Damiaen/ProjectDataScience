@@ -16,19 +16,23 @@ public class Parser {
     private List<NewColumn> newColumnsList = new ArrayList<>();
 
     /**
-     * Prepare the parser by setting the data
+     * Prepare the parser by setting the raw data location and ignored columns
+     * <p>
+     * Place the raw data files in the following folder: resources/database/raw
+     * Extract the zip files in separate folders.
+     * Example of correct filepath: ProjectDataScience/src/main/resources/database/raw/title.ratings.tsv/data.tsv
      */
     public void setupParser() throws IOException {
 
         // All data files, requires original filename and integer array with ignored indexes.
         // If no value given for the integer array it will parse all the data.
         this.newColumnsList.add(new NewColumn("name.basics.tsv/data", new Integer[]{1, 2}));
-//        this.newColumnsList.add(new NewColumn("title.akas.tsv/data", new Integer[]{}));
-//        this.newColumnsList.add(new NewColumn("title.basics.tsv/data", new Integer[]{}));
-//        this.newColumnsList.add(new NewColumn("title.crew.tsv/data", new Integer[]{}));
-//        this.newColumnsList.add(new NewColumn("title.episode.tsv/data", new Integer[]{}));
-//        this.newColumnsList.add(new NewColumn("title.principals.tsv/data", new Integer[]{}));
-//        this.newColumnsList.add(new NewColumn("title.ratings.tsv/data", new Integer[]{}));
+        this.newColumnsList.add(new NewColumn("title.akas.tsv/data", new Integer[]{}));
+        this.newColumnsList.add(new NewColumn("title.basics.tsv/data", new Integer[]{}));
+        this.newColumnsList.add(new NewColumn("title.crew.tsv/data", new Integer[]{}));
+        this.newColumnsList.add(new NewColumn("title.episode.tsv/data", new Integer[]{}));
+        this.newColumnsList.add(new NewColumn("title.principals.tsv/data", new Integer[]{}));
+        this.newColumnsList.add(new NewColumn("title.ratings.tsv/data", new Integer[]{}));
 
         try {
             convertTSVToCSVFile(this.newColumnsList);
@@ -84,24 +88,24 @@ public class Parser {
 
                     // For each string in the new column append it and check if it has to be removed or not by referencing the ignored column list
                     for (int i = 0; i < newColumnArray.size(); i++) {
-
-                        System.out.println(newColumnArray.get(i));
-
                         if (!ignoreColumnCheck(newColumn.ignoreColumns, i)) {
                             newLine.append(newColumnArray.get(i));
                         }
                     }
 
                     // Clear the newColumns ArrayList and write the new data to the csv file
-                    newColumns.clear();
-                    System.out.println("Writing new string to csv:" + newLine);
+                    newColumnArray.clear();
                     writer.write(newLine + System.getProperty("line.separator"));
+
+                    // Log complete newline for debug purposes
+//                    System.out.println(newLine);
 
                 }
                 // Confirmation that parsing has been completed
                 System.out.println("Done with converting file '" + newFileName + "' to csv. Path to new file: 'src/main/resources/database/csv/" + newFileName + ".csv");
             }
         }
+        System.out.println("---------------------------------------- DONE WITH CONVERSION OF DATA TO CSV ----------------------------------------");
     }
 
     /**
@@ -120,15 +124,12 @@ public class Parser {
      * @param fileName = name of file
      */
     private static File getFileFromResources(String fileName) {
-        System.out.println("Getting raw tsv file from resources directory");
         ClassLoader classLoader = Parser.class.getClassLoader();
-
         URL resource = classLoader.getResource(fileName);
         if (resource == null) {
             throw new IllegalArgumentException("ERROR: file not found!, is the path to the raw tsc correct?");
         } else {
             return new File(resource.getFile());
         }
-
     }
 }
