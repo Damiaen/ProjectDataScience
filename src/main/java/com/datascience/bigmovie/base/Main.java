@@ -1,9 +1,11 @@
 package com.datascience.bigmovie.base;
 
+import com.datascience.bigmovie.base.Logic.Parser;
+
 import java.io.*;
 
 /**
- * @author Team ??, Project Data Science
+ * @author Damiaen Toussaint, team 4,  Project Data Science
  */
 public class Main {
 

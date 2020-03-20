@@ -1,9 +1,9 @@
-package com.datascience.bigmovie.base;
+package com.datascience.bigmovie.base.models;
 
 /**
- * @author Team ??, Project Data Science
+ * @author Damiaen Toussaint, team 4,  Project Data Science
  */
-public class NewColumn {
+public class Column {
 
     private Integer[] ignoreColumns;
     private Integer[] splitColumns;
@@ -17,7 +17,7 @@ public class NewColumn {
      *
      * TODO: Make it so it can base the ignored values on column name instead of index
      */
-    public NewColumn(String dataSource, String newFileName,  Integer[] ignoreColumns, Integer[] splitColumns) {
+    public Column(String dataSource, String newFileName, Integer[] ignoreColumns, Integer[] splitColumns) {
         this.dataSource = dataSource;
         this.newFileName = newFileName;
         this.ignoreColumns = ignoreColumns;
