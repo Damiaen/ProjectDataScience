@@ -9,7 +9,7 @@ import java.util.StringTokenizer;
 import java.io.FileWriter;
 
 /**
- * @author Team ??, Project Data Science
+ * @author Damiaen Toussaint, team ??,  Project Data Science
  */
 public class Parser {
 
@@ -17,23 +17,37 @@ public class Parser {
 
     /**
      * Prepare the parser by setting the raw data location and ignored columns
-     * <p>
      * Place the raw data files in the following folder: resources/database/raw
      * Extract the zip files in separate folders.
      * Example of correct filepath: ProjectDataScience/src/main/resources/database/raw/title.ratings.tsv/data.tsv
+     *
+     * TODO: Er is nog geen database design, dus ik heb zoveel mogelijk functionaliteit geprobeerd in de parser te stoppen
      */
     public void setupParser() throws IOException {
 
-        // All data files, requires original filename and integer array with ignored indexes.
-        // If no value given for the integer array it will parse all the data.
-        this.newColumnsList.add(new NewColumn("name.basics.tsv/data", new Integer[]{1, 2}));
-        this.newColumnsList.add(new NewColumn("title.akas.tsv/data", new Integer[]{}));
-        this.newColumnsList.add(new NewColumn("title.basics.tsv/data", new Integer[]{}));
-        this.newColumnsList.add(new NewColumn("title.crew.tsv/data", new Integer[]{}));
-        this.newColumnsList.add(new NewColumn("title.episode.tsv/data", new Integer[]{}));
-        this.newColumnsList.add(new NewColumn("title.principals.tsv/data", new Integer[]{}));
-        this.newColumnsList.add(new NewColumn("title.ratings.tsv/data", new Integer[]{}));
+        // All data files, requires dataSource, newFileName, int array with ignored indexes and integer array for indexes to split.
+        // If no value is given for any of the integer arrays it will just parse all the data as normal.
 
+        // Actors table
+        this.newColumnsList.add(new NewColumn("name.basics.tsv/data", "Actors", new Integer[]{5}, new Integer[]{}));
+        // Has played in movie table
+        this.newColumnsList.add(new NewColumn("name.basics.tsv/data", "ActorHasPlayedIn", new Integer[]{1,2,3,4}, new Integer[]{5}));
+        // Movie title in original name
+        this.newColumnsList.add(new NewColumn("title.akas.tsv/data","OriginalMovieName", new Integer[]{}, new Integer[]{}));
+        // Movie english title and general data (genre/playtime)
+        this.newColumnsList.add(new NewColumn("title.basics.tsv/data","MovieName", new Integer[]{}, new Integer[]{}));
+
+        // Crew belonging to movie
+        this.newColumnsList.add(new NewColumn("title.crew.tsv/data","MovieDirectors", new Integer[]{2}, new Integer[]{1}));
+        // Crew belonging to movie
+        this.newColumnsList.add(new NewColumn("title.crew.tsv/data","MovieWriters", new Integer[]{1}, new Integer[]{2}));
+
+        // Amount of seasons and episodes
+        this.newColumnsList.add(new NewColumn("title.episode.tsv/data","Episodes", new Integer[]{}, new Integer[]{}));
+        // Movie roles and data
+        this.newColumnsList.add(new NewColumn("title.principals.tsv/data","Principals", new Integer[]{}, new Integer[]{}));
+        // Ratings for the movie/show
+        this.newColumnsList.add(new NewColumn("title.ratings.tsv/data","Ratings", new Integer[]{}, new Integer[]{}));
         try {
             convertTSVToCSVFile(this.newColumnsList);
         } catch (IOException e) {
@@ -53,12 +67,11 @@ public class Parser {
 
         for (NewColumn newColumn : newColumns) {
             // Get file from resources folder
-            File file = getFileFromResources("database/raw/" + newColumn.originalFileName + ".tsv");
-            String newFileName = newColumn.originalFileName.split(".tsv/")[0];
-            String newFilePath = "src/main/resources/database/csv/" + newFileName + ".csv";
+            File file = getFileFromResources("database/raw/" + newColumn.getDataSource() + ".tsv");
+            String newFilePath = "src/main/resources/database/csv/" + newColumn.getNewFileName() + ".csv";
 
             //Try to read the existing data and write it to a new csv file
-            System.out.println("Starting converting file '" + newFileName + "' to csv.");
+            System.out.println("Starting converting file '" + newColumn.getDataSource() + ".tsv' to '" + newColumn.getNewFileName() + ".csv'");
 
             try (BufferedReader br = new BufferedReader(new FileReader(file));
                  PrintWriter writer = new PrintWriter(new FileWriter(newFilePath))) {
@@ -68,7 +81,7 @@ public class Parser {
                     tokenizer = new StringTokenizer(line, "\t");
                     String token;
 
-                    // Temporary stored new line of data
+                    // Temporary stored single line of data
                     StringBuilder newLine = new StringBuilder();
 
                     // New ArrayList used for temporary storing the newly generated csv column data
@@ -76,6 +89,9 @@ public class Parser {
 
                     while (tokenizer.hasMoreTokens()) {
                         token = tokenizer.nextToken().replaceAll("\"", "'");
+
+                        // If value of token is '\\N' replace it with NULL
+                        if (token.contains("\\N")) token = "NULL";
                         newColumnArray.add("\"" + token + "\",");
                     }
 
@@ -86,35 +102,49 @@ public class Parser {
                         newColumnArray.set(newColumnArray.size() - 1, lastRow); // set at the last index value
                     }
 
+
+                    List<String> splitColumnsArray = new ArrayList<>();
                     // For each string in the new column append it and check if it has to be removed or not by referencing the ignored column list
                     for (int i = 0; i < newColumnArray.size(); i++) {
-                        if (!ignoreColumnCheck(newColumn.ignoreColumns, i)) {
-                            newLine.append(newColumnArray.get(i));
+                        // Check if it has to ignore this column
+                        if (!checkIfContains(newColumn.getIgnoreColumns(), i)) {
+                            // Check if it has to split the string into multiple or not
+                            if (checkIfContains(newColumn.getSplitColumns(), i)) {
+                                splitColumnsArray.addAll(Arrays.asList(newColumnArray.get(i).split("\\s*,\\s*")));
+                            } else {
+                                newLine.append(newColumnArray.get(i));
+                            }
                         }
                     }
 
-                    // Clear the newColumns ArrayList and write the new data to the csv file
-                    newColumnArray.clear();
-                    writer.write(newLine + System.getProperty("line.separator"));
-
-                    // Log complete newline for debug purposes
-//                    System.out.println(newLine);
-
+                    // Check if splitColumnsArray has been filled, if not continue as normal
+                    if (splitColumnsArray.size() != 0) {
+                        for (String splitColumn: splitColumnsArray ) {
+                            String colData = splitColumn.replaceAll("\"", "");
+                            // Ignore if data is null, since we dont need that for linking tables together
+                            if (!colData.equals("NULL")) {
+                                writer.write(newLine + "\"" + splitColumn.replaceAll("\"", "") + "\"" + System.getProperty("line.separator"));
+                            }
+                        }
+                    } else {
+                        newColumnArray.clear();
+                        writer.write(newLine + System.getProperty("line.separator"));
+                    }
                 }
                 // Confirmation that parsing has been completed
-                System.out.println("Done with converting file '" + newFileName + "' to csv. Path to new file: 'src/main/resources/database/csv/" + newFileName + ".csv");
+                System.out.println("Done with converting file '" + newColumn.getNewFileName() + "' to csv. Path to new file: 'src/main/resources/database/csv/" + newColumn.getNewFileName() + ".csv");
             }
         }
         System.out.println("---------------------------------------- DONE WITH CONVERSION OF DATA TO CSV ----------------------------------------");
     }
 
     /**
-     * Check if integer exists in the ignorecolumns array
+     * Check if integer exists in the integer array
      *
      * @param arr         = Given array
      * @param targetValue = search value
      */
-    public static boolean ignoreColumnCheck(Integer[] arr, int targetValue) {
+    public static boolean checkIfContains(Integer[] arr, int targetValue) {
         return Arrays.asList(arr).contains(targetValue);
     }
 
