@@ -14,8 +14,6 @@ public class Column {
      * @param dataSource = Data source name/location
      * @param newFileName = New filename
      * @param ignoreColumns    = Columns to ignore, based on index value
-     *
-     * TODO: Make it so it can base the ignored values on column name instead of index
      */
     public Column(String dataSource, String newFileName, Integer[] ignoreColumns, Integer[] splitColumns) {
         this.dataSource = dataSource;
@@ -24,17 +22,29 @@ public class Column {
         this.splitColumns = splitColumns;
     }
 
+    /**
+     * @return  ignoreColumns = Columns to ignore
+     */
     public Integer[] getIgnoreColumns() {
         return ignoreColumns;
     }
 
+    /**
+     * @return  dataSource = Location/name of original data source
+     */
     public String getDataSource() {
         return dataSource;
     }
 
+    /**
+     * @return  newFileName = Name of new file and possible sql table name
+     */
     public String getNewFileName() {
         return newFileName;
     }
 
+    /**
+     * @return  splitColumns = Which columns the application has to split for linked tables in the database
+     */
     public Integer[] getSplitColumns() { return splitColumns; }
 }

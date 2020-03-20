@@ -65,7 +65,7 @@ public class Parser {
      * Since the raw data files are tsv, we only need to replace certain characters to convert them to csv files.
      *
      * @param columns = raw data path
-     * TODO: Add more logic here once database design/SQL Stuff is done
+     * TODO: Meer logica toevoegen aan deze functie als de database designs en sql setup klaar is.
      */
     private static void convertTSVToCSVFile(List<Column> columns) throws IOException {
 
@@ -132,7 +132,8 @@ public class Parser {
     }
 
     /**
-     * Check if integer exists in the integer array
+     * Do the final checks and return the final completed string
+     *
      * @param splitColumnsArray     = Given data
      * @param newLine               = NewLine data
      * @param ignoreColumns         = Array of columns to ignore
@@ -161,7 +162,7 @@ public class Parser {
     }
 
     /**
-     * Check if the current row is duplicate compared to the last written row
+     * Check if the current row is duplicate compared to the last written row.
      * Since the data is sorted, we only need to check the last written row and not all the data.
      *
      * @param newCsvLine    = New csv row
@@ -180,7 +181,7 @@ public class Parser {
         ClassLoader classLoader = Parser.class.getClassLoader();
         URL resource = classLoader.getResource(fileName);
         if (resource == null) {
-            throw new IllegalArgumentException("ERROR: file not found!, is the path to the raw tsc correct?");
+            throw new IllegalArgumentException("ERROR: file not found!, is the path to the raw tsv file correct?");
         } else {
             return new File(resource.getFile());
         }
