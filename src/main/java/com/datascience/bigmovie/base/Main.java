@@ -1,6 +1,6 @@
 package com.datascience.bigmovie.base;
 
-import com.datascience.bigmovie.base.Logic.Parser;
+import com.datascience.bigmovie.base.UserInterface.UserInterface;
 
 import java.io.*;
 
@@ -14,7 +14,7 @@ public class Main {
      */
     public static void main(String[] args) {
         try {
-            new Parser().setupParser();
+            new UserInterface().main();
         } catch (IOException e) {
             e.printStackTrace();
         }
