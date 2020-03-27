@@ -1,6 +1,6 @@
 package com.datascience.bigmovie.base.Logic;
 
-import com.datascience.bigmovie.base.models.Column;
+import com.datascience.bigmovie.base.Models.Column;
 
 import java.io.*;
 import java.net.URL;
@@ -74,11 +74,11 @@ public class Parser {
 
         for (Column column : columns) {
             // Get raw data file from from resources folder and set new file path
-            File file = getFileFromResources("database/raw/" + column.getDataSource() + ".tsv");
+            String originalFile = "src/main/resources/database/raw/" + column.getDataSource() + ".tsv";
             String newFilePath = "src/main/resources/database/csv/" + column.getNewFileName() + ".csv";
             System.out.println("Starting converting file '" + column.getDataSource() + ".tsv' to '" + column.getNewFileName() + ".csv'");
 
-            try (BufferedReader br = new BufferedReader(new FileReader(file));
+            try (BufferedReader br = new BufferedReader(new FileReader(originalFile));
                  PrintWriter writer = new PrintWriter(new FileWriter(newFilePath))) {
 
                 // For loop through each line that exists in de tsv file
