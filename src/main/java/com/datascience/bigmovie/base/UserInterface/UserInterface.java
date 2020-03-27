@@ -1,13 +1,13 @@
 package com.datascience.bigmovie.base.UserInterface;
 
-import com.datascience.bigmovie.base.Logic.Parser;
-
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * @author Damiaen Toussaint, team 4,  Project Data Science
+ */
 public class UserInterface extends JFrame{
     private JPanel rootPanel;
     private JButton button_parse;

@@ -1,9 +1,7 @@
 package com.datascience.bigmovie.base;
 
 import com.datascience.bigmovie.base.UserInterface.UserInterface;
-
 import javax.swing.*;
-import java.io.*;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science

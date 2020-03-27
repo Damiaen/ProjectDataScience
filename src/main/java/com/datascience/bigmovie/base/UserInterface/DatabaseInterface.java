@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * @author Damiaen Toussaint, team 4,  Project Data Science
+ */
 public class DatabaseInterface {
     private JPanel content_panel;
     private JPanel buttons_panel;

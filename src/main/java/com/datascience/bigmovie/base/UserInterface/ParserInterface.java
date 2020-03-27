@@ -5,8 +5,10 @@ import com.datascience.bigmovie.base.Logic.Parser;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
+/**
+ * @author Damiaen Toussaint, team 4,  Project Data Science
+ */
 public class ParserInterface{
     private JPanel rootPanel;
     private JPanel content_panel;
