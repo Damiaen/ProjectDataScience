@@ -1,11 +1,11 @@
-package com.datascience.bigmovie.base;
+package com.datascience.bigmovie.base.DBBuild;
 
 import java.io.*;
 import java.sql.*;
 
 public class JDBCUtil4 {
 
-    public static void main(String[] args) {
+    public static void main() {
         String jdbcURL = "jdbc:mysql://localhost:3306/moviedb";
         String username = "root";
         String password = "";
@@ -25,7 +25,7 @@ public class JDBCUtil4 {
 
             connection.setAutoCommit(false);
 
-            String sql = "INSERT INTO principals (personId, ordening, titleId, category, job, characters) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Principals (personId, ordening, titleId, category, job, characters) VALUES (?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             BufferedReader lineReader = new BufferedReader(new FileReader(csvFilePath));
@@ -87,6 +87,7 @@ public class JDBCUtil4 {
             ex.printStackTrace();
 
             try {
+                assert connection != null;
                 connection.rollback();
             } catch (SQLException e) {
                 e.printStackTrace();

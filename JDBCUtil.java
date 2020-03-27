@@ -1,16 +1,16 @@
-package com.datascience.bigmovie.base;
+package com.datascience.bigmovie.base.DBBuild;
 
 import java.io.*;
 import java.sql.*;
 
 public class JDBCUtil {
 
-    public static void main(String[] args) {
+    public static void main() {
         String jdbcURL = "jdbc:mysql://localhost:3306/moviedb";
         String username = "root";
         String password = "";
 
-        String csvFilePath = "src/main/resources/database/csv/actors.csv";
+        String csvFilePath = "src/main/resources/database/csv/NameBasics.csv";
 
         int batchSize = 20;
         Connection connection = null;
@@ -20,7 +20,7 @@ public class JDBCUtil {
             connection = DriverManager.getConnection(jdbcURL, username, password);
             connection.setAutoCommit(false);
 
-            String sql = "INSERT INTO person (id, primaryName, birthYear, deathYear, primaryProfessions) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Person (id, primaryName, birthYear, deathYear, primaryProfessions) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             BufferedReader lineReader = new BufferedReader(new FileReader(csvFilePath));
@@ -40,8 +40,7 @@ public class JDBCUtil {
                 for(int i = 5; i < data.length; i++)
                 {
                     int strLength = primaryProfessions.length()+data[i].length();
-                    String result = new StringBuilder(strLength).append(primaryProfessions).append(",").append(data[i]).toString();
-                    primaryProfessions = result;
+                    primaryProfessions = primaryProfessions + "," + data[i];
                 }
                 id = id.replaceAll("\"","");
                 primaryName = primaryName.replaceAll("\"","");
@@ -50,18 +49,7 @@ public class JDBCUtil {
                 primaryProfessions = primaryProfessions.replaceAll("\"","");
                 statement.setString(1, id);
                 statement.setString(2, primaryName);
-                if(birthYear.equals("NULL"))
-                {
-                    statement.setInt(3, 0);
-                }else {
-                    statement.setInt(3, Integer.parseInt(birthYear));
-                }
-                if(deathYear.equals("NULL"))
-                {
-                    statement.setInt(4, 0);
-                }else {
-                    statement.setInt(4, Integer.parseInt(deathYear));
-                }
+                BirthYearNullCheck(statement, birthYear, deathYear);
                 statement.setString(5, primaryProfessions);
 
                 statement.addBatch();
@@ -86,11 +74,27 @@ public class JDBCUtil {
             ex.printStackTrace();
 
             try {
+                assert connection != null;
                 connection.rollback();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
 
+    }
+
+    static void BirthYearNullCheck(PreparedStatement statement, String birthYear, String deathYear) throws SQLException {
+        if(birthYear.equals("NULL"))
+        {
+            statement.setInt(3, 0);
+        }else {
+            statement.setInt(3, Integer.parseInt(birthYear));
+        }
+        if(deathYear.equals("NULL"))
+        {
+            statement.setInt(4, 0);
+        }else {
+            statement.setInt(4, Integer.parseInt(deathYear));
+        }
     }
 }

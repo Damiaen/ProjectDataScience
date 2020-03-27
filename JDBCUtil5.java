@@ -1,11 +1,11 @@
-package com.datascience.bigmovie.base;
+package com.datascience.bigmovie.base.DBBuild;
 
 import java.io.*;
 import java.sql.*;
 
 public class JDBCUtil5 {
 
-    public static void main(String[] args) {
+    public static void main() {
         String jdbcURL = "jdbc:mysql://localhost:3306/moviedb";
         String username = "root";
         String password = "";
@@ -25,7 +25,7 @@ public class JDBCUtil5 {
 
             connection.setAutoCommit(false);
 
-            String sql = "INSERT INTO titleepisode (id, titleId, seasonNumber, episodeNumber) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO TitleEpisode (id, titleId, seasonNumber, episodeNumber) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             BufferedReader lineReader = new BufferedReader(new FileReader(csvFilePath));
@@ -50,16 +50,7 @@ public class JDBCUtil5 {
 
                 statement.setString(1, id);
                 statement.setString(2, titleId);
-                if(seasonNumber.equals("NULL")){
-                    statement.setInt(3, 0);
-                }else {
-                    statement.setInt(3, Integer.parseInt(seasonNumber));
-                }
-                if(episodeNumber.equals("NULL")){
-                    statement.setInt(4, 0);
-                }else {
-                    statement.setInt(4, Integer.parseInt(episodeNumber));
-                }
+                JDBCUtil.BirthYearNullCheck(statement, seasonNumber, episodeNumber);
 
                 statement.addBatch();
 
@@ -88,6 +79,7 @@ public class JDBCUtil5 {
             ex.printStackTrace();
 
             try {
+                assert connection != null;
                 connection.rollback();
             } catch (SQLException e) {
                 e.printStackTrace();

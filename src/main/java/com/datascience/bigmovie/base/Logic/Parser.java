@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.io.FileWriter;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science
@@ -18,54 +17,10 @@ public class Parser {
     private List<Column> columnsList = new ArrayList<>();
 
     /**
-     * Prepare the parser by setting the raw data location and ignored columns
-     * Place the raw data files in the following folder: resources/database/raw
-     * Extract the zip files in separate folders.
-     * Example of correct filepath: ProjectDataScience/src/main/resources/database/raw/title.ratings.tsv/data.tsv
-     *
-     * TODO: Er is op dit moment nog geen database design, dus er zit zoveel mogelijk functionaliteit in om snel een database op te kunnen zetten.
-     */
-    public void setupParser() throws IOException {
-
-        // Define the new csv files here, all data files, requires dataSource, newFileName, IgnoredColumns and SplitColumns
-        // IgnoredColumns and SplitColumns are based on an integer array, given integers will be used as indexes.
-        // If no value is given for any of the integer arrays it will parse all the data.
-
-        // Actors table
-        this.columnsList.add(new Column("name.basics.tsv/data", "Actors", new Integer[]{5}, new Integer[]{}));
-        // Has played in movie table
-        this.columnsList.add(new Column("name.basics.tsv/data", "ActorHasPlayedIn", new Integer[]{1,2,3,4}, new Integer[]{5}));
-
-        // Movie title in original name
-        this.columnsList.add(new Column("title.akas.tsv/data","OriginalMovieName", new Integer[]{}, new Integer[]{}));
-        // Movie english title and general data (genre/playtime)
-        this.columnsList.add(new Column("title.basics.tsv/data","MovieName", new Integer[]{}, new Integer[]{}));
-
-        // Crew belonging to movie
-        this.columnsList.add(new Column("title.crew.tsv/data","MovieDirectors", new Integer[]{2}, new Integer[]{1}));
-        // Crew belonging to movie
-        this.columnsList.add(new Column("title.crew.tsv/data","MovieWriters", new Integer[]{1}, new Integer[]{2}));
-
-        // Amount of seasons and episodes
-        this.columnsList.add(new Column("title.episode.tsv/data","Episodes", new Integer[]{}, new Integer[]{}));
-        // Movie roles and data
-        this.columnsList.add(new Column("title.principals.tsv/data","Principals", new Integer[]{}, new Integer[]{}));
-        // Ratings for the movie/show
-        this.columnsList.add(new Column("title.ratings.tsv/data","Ratings", new Integer[]{}, new Integer[]{}));
-
-        try {
-            convertTSVToCSVFile(this.columnsList);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    /**
      * Since the raw data files are tsv, we only need to replace certain characters to convert them to csv files.
      *
      * @param columns = raw data path
-     * TODO: Meer logica toevoegen aan deze functie als de database designs en sql setup klaar is.
+     *                TODO: Meer logica toevoegen aan deze functie als de database designs en sql setup klaar is.
      */
     private static void convertTSVToCSVFile(List<Column> columns) throws IOException {
 
@@ -121,7 +76,8 @@ public class Parser {
                     // Get the complete newLine and check if it is not duplicate, then write it in the new file.
                     String completedNewLine = getNewLine(splitColumnsArray, newLine, column.getIgnoreColumns());
                     if (!checkIfDuplicateRow(completedNewLine, lastRowData)) {
-                        writer.write(completedNewLine); lastRowData = completedNewLine;
+                        writer.write(completedNewLine);
+                        lastRowData = completedNewLine;
                     }
 
                 }
@@ -134,16 +90,16 @@ public class Parser {
     /**
      * Do the final checks and return the final completed string
      *
-     * @param splitColumnsArray     = Given data
-     * @param newLine               = NewLine data
-     * @param ignoreColumns         = Array of columns to ignore
+     * @param splitColumnsArray = Given data
+     * @param newLine           = NewLine data
+     * @param ignoreColumns     = Array of columns to ignore
      */
     private static String getNewLine(List<String> splitColumnsArray, StringBuilder newLine, Integer[] ignoreColumns) {
         if (ignoreColumns.length >= 1) {
-            for (String splitColumn: splitColumnsArray ) {
+            for (String splitColumn : splitColumnsArray) {
                 String colData = splitColumn.replaceAll("\"", "");
                 // Ignore if data is null or empty, since we dont need that for linking tables together
-                if (!colData.equals("NULL") && !colData.equals(" ") ) {
+                if (!colData.equals("NULL") && !colData.equals(" ")) {
                     return (newLine + "\"" + splitColumn.replaceAll("\"", "") + "\"" + System.getProperty("line.separator"));
                 }
             }
@@ -165,8 +121,8 @@ public class Parser {
      * Check if the current row is duplicate compared to the last written row.
      * Since the data is sorted, we only need to check the last written row and not all the data.
      *
-     * @param newCsvLine    = New csv row
-     * @param lastRowData   = Last written csv row
+     * @param newCsvLine  = New csv row
+     * @param lastRowData = Last written csv row
      */
     public static boolean checkIfDuplicateRow(String newCsvLine, String lastRowData) {
         return newCsvLine.equals(lastRowData);
@@ -185,5 +141,40 @@ public class Parser {
         } else {
             return new File(resource.getFile());
         }
+    }
+
+    /**
+     * Prepare the parser by setting the raw data location and ignored columns
+     * Place the raw data files in the following folder: resources/database/raw
+     * Extract the zip files in separate folders.
+     * Example of correct filepath: ProjectDataScience/src/main/resources/database/raw/title.ratings.tsv/data.tsv
+     * <p>
+     * TODO: Er is op dit moment nog geen database design, dus er zit zoveel mogelijk functionaliteit in om snel een database op te kunnen zetten.
+     */
+    public void setupParser() throws IOException {
+
+        // Define the new csv files here, all data files, requires dataSource, newFileName, IgnoredColumns and SplitColumns
+        // IgnoredColumns and SplitColumns are based on an integer array, given integers will be used as indexes.
+        // If no value is given for any of the integer arrays it will parse all the data.
+
+        // All names and info of actors,producers, etc
+        this.columnsList.add(new Column("name.basics.tsv/data", "NameBasics", new Integer[]{}, new Integer[]{}));
+        // Movie title also know as
+        this.columnsList.add(new Column("title.akas.tsv/data", "TitleAKAS", new Integer[]{}, new Integer[]{}));
+        // Movie title basics
+        this.columnsList.add(new Column("title.basics.tsv/data", "TitleBasics", new Integer[]{}, new Integer[]{}));
+        // Amount of seasons and episodes
+        this.columnsList.add(new Column("title.episode.tsv/data", "Episodes", new Integer[]{}, new Integer[]{}));
+        // Movie roles and data
+        this.columnsList.add(new Column("title.principals.tsv/data", "Principals", new Integer[]{}, new Integer[]{}));
+        // Ratings for the movie/show
+        this.columnsList.add(new Column("title.ratings.tsv/data", "Ratings", new Integer[]{}, new Integer[]{}));
+
+        try {
+            convertTSVToCSVFile(this.columnsList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

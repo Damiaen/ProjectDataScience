@@ -1,18 +1,18 @@
-package com.datascience.bigmovie.base;
+package com.datascience.bigmovie.base.DBBuild;
 
 import java.io.*;
 import java.sql.*;
 
 public class JDBCUtil2 {
 
-    public static void main(String[] args) {
+    public static void main() {
 
         String jdbcURL = "jdbc:mysql://localhost:3306/moviedb";
         String username = "root";
         String password = "";
 
 
-        String csvFilePath = "src/main/resources/database/csv/OriginalMovieName.csv";
+        String csvFilePath = "src/main/resources/database/csv/TitleAKAS.csv";
 
         int batchSize = 20;
         Connection connection = null;
@@ -27,7 +27,7 @@ public class JDBCUtil2 {
 
             connection.setAutoCommit(false);
 
-            String sql = "INSERT INTO titleakas (titleId, ordening, title, region, language, types, attributes, isOriginalTitle) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO TitleAKAS (titleId, ordening, title, region, language, types, attributes, isOriginalTitle) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             BufferedReader lineReader = new BufferedReader(new FileReader(csvFilePath));
@@ -96,6 +96,7 @@ public class JDBCUtil2 {
             ex.printStackTrace();
 
             try {
+                assert connection != null;
                 connection.rollback();
             } catch (SQLException e) {
                 e.printStackTrace();
