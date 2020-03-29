@@ -97,11 +97,13 @@ public class UserInterface extends JFrame{
     /**
      * Dispose of the main UI and open the QuestionBuilder UI
      * TODO: Implement SQL Query Builder here
+     * TODO: Cleanup disabling of buttons
      */
     private void runQuestionBuilder() throws IOException {
         button_parse.setEnabled(false);
         button_build.setEnabled(false);
         ask_question.setEnabled(false);
+        questions_list.setEnabled(false);
         questionProgressBar.setVisible(true);
         questionProgressBar.setIndeterminate(true);
 
@@ -120,6 +122,7 @@ public class UserInterface extends JFrame{
                 button_parse.setEnabled(true);
                 button_build.setEnabled(true);
                 ask_question.setEnabled(true);
+                questions_list.setEnabled(true);
 
                 try {
                     // Get data from combobox and set question, this is temporary for testing only
