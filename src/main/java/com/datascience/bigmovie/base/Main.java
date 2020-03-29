@@ -1,8 +1,7 @@
 package com.datascience.bigmovie.base;
 
-import com.datascience.bigmovie.base.Logic.Parser;
-
-import java.io.IOException;
+import com.datascience.bigmovie.base.UserInterface.UserInterface;
+import javax.swing.*;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science
@@ -14,8 +13,11 @@ public class Main {
      */
     public static void main(String[] args) {
         try {
-            new Parser().setupParser();
-        } catch (IOException e) {
+            // Force Windows style for the Swing application
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+            // Start the main UI
+            new UserInterface();
+        } catch (IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
