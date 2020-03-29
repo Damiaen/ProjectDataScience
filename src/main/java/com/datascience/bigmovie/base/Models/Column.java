@@ -11,9 +11,9 @@ public class Column {
     private String newFileName;
 
     /**
-     * @param dataSource = Data source name/location
-     * @param newFileName = New filename
-     * @param ignoreColumns    = Columns to ignore, based on index value
+     * @param dataSource    = Data source name/location
+     * @param newFileName   = New filename
+     * @param ignoreColumns = Columns to ignore, based on index value
      */
     public Column(String dataSource, String newFileName, Integer[] ignoreColumns, Integer[] splitColumns) {
         this.dataSource = dataSource;
@@ -23,28 +23,30 @@ public class Column {
     }
 
     /**
-     * @return  ignoreColumns = Columns to ignore
+     * @return ignoreColumns = Columns to ignore
      */
     public Integer[] getIgnoreColumns() {
         return ignoreColumns;
     }
 
     /**
-     * @return  dataSource = Location/name of original data source
+     * @return dataSource = Location/name of original data source
      */
     public String getDataSource() {
         return dataSource;
     }
 
     /**
-     * @return  newFileName = Name of new file and possible sql table name
+     * @return newFileName = Name of new file and possible sql table name
      */
     public String getNewFileName() {
         return newFileName;
     }
 
     /**
-     * @return  splitColumns = Which columns the application has to split for linked tables in the database
+     * @return splitColumns = Which columns the application has to split for linked tables in the database
      */
-    public Integer[] getSplitColumns() { return splitColumns; }
+    public Integer[] getSplitColumns() {
+        return splitColumns;
+    }
 }

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.io.FileWriter;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science
@@ -114,7 +113,8 @@ public class Parser {
                     // Get the complete newLine and check if it is not duplicate, then write it in the new file.
                     String completedNewLine = getNewLine(splitColumnsArray, newLine, column.getIgnoreColumns());
                     if (!checkIfDuplicateRow(completedNewLine, lastRowData)) {
-                        writer.write(completedNewLine); lastRowData = completedNewLine;
+                        writer.write(completedNewLine);
+                        lastRowData = completedNewLine;
                     }
 
                 }
@@ -127,16 +127,16 @@ public class Parser {
     /**
      * Do the final checks and return the final completed string
      *
-     * @param splitColumnsArray     = Given data
-     * @param newLine               = NewLine data
-     * @param ignoreColumns         = Array of columns to ignore
+     * @param splitColumnsArray = Given data
+     * @param newLine           = NewLine data
+     * @param ignoreColumns     = Array of columns to ignore
      */
     private static String getNewLine(List<String> splitColumnsArray, StringBuilder newLine, Integer[] ignoreColumns) {
         if (ignoreColumns.length >= 1) {
-            for (String splitColumn: splitColumnsArray ) {
+            for (String splitColumn : splitColumnsArray) {
                 String colData = splitColumn.replaceAll("\"", "");
                 // Ignore if data is null or empty, since we dont need that for linking tables together
-                if (!colData.equals("NULL") && !colData.equals(" ") ) {
+                if (!colData.equals("NULL") && !colData.equals(" ")) {
                     return (newLine + "\"" + splitColumn.replaceAll("\"", "") + "\"" + System.getProperty("line.separator"));
                 }
             }
@@ -158,8 +158,8 @@ public class Parser {
      * Check if the current row is duplicate compared to the last written row.
      * Since the data is sorted, we only need to check the last written row and not all the data.
      *
-     * @param newCsvLine    = New csv row
-     * @param lastRowData   = Last written csv row
+     * @param newCsvLine  = New csv row
+     * @param lastRowData = Last written csv row
      */
     public static boolean checkIfDuplicateRow(String newCsvLine, String lastRowData) {
         return newCsvLine.equals(lastRowData);
