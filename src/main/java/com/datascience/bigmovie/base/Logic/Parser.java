@@ -22,8 +22,6 @@ public class Parser {
      * Place the raw data files in the following folder: resources/database/raw
      * Extract the zip files in separate folders.
      * Example of correct filepath: ProjectDataScience/src/main/resources/database/raw/title.ratings.tsv/data.tsv
-     *
-     * TODO: Er is op dit moment nog geen database design, dus er zit zoveel mogelijk functionaliteit in om snel een database op te kunnen zetten.
      */
     public void setupParser() throws IOException {
 
@@ -40,11 +38,6 @@ public class Parser {
         this.columnsList.add(new Column("title.akas.tsv/data","OriginalMovieName", new Integer[]{}, new Integer[]{}));
         // Movie english title and general data (genre/playtime)
         this.columnsList.add(new Column("title.basics.tsv/data","MovieName", new Integer[]{}, new Integer[]{}));
-
-        // Crew belonging to movie
-        this.columnsList.add(new Column("title.crew.tsv/data","MovieDirectors", new Integer[]{2}, new Integer[]{1}));
-        // Crew belonging to movie
-        this.columnsList.add(new Column("title.crew.tsv/data","MovieWriters", new Integer[]{1}, new Integer[]{2}));
 
         // Amount of seasons and episodes
         this.columnsList.add(new Column("title.episode.tsv/data","Episodes", new Integer[]{}, new Integer[]{}));

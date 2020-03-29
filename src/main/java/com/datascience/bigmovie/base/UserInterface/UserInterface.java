@@ -71,7 +71,7 @@ public class UserInterface extends JFrame{
      */
     private void createInterfaceElements() {
         userInterfaceFrame.setContentPane(rootPanel);
-        userInterfaceFrame.setSize(720,480);
+        userInterfaceFrame.setSize(720,340);
         userInterfaceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         userInterfaceFrame.setVisible(true);
     }
@@ -108,7 +108,7 @@ public class UserInterface extends JFrame{
         new SwingWorker<Void, String>() {
             @Override
             protected Void doInBackground() throws Exception {
-                // Temporary slowdown to simulate query
+                // Temporary slowdown to simulate query, implement query function here
                 Thread.sleep(2000);
                 return null;
             }
