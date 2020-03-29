@@ -2,12 +2,14 @@ package com.datascience.bigmovie.base.Database;
 
 import java.io.*;
 import java.sql.*;
-
-public class JDBCUtil5 extends JDBCUtilSettings {
+/**
+ * @author Mathijs Grafhorst, team 4,  Project Data Science
+ */
+public class JDBCUtil7 extends JDBCUtilSettings {
 
     public void main() {
 
-        String csvFilePath = "src/main/resources/database/csv/Episodes.csv";
+        String csvFilePath = "src/main/resources/database/csv/TitlesKnowFor.csv";
 
         int batchSize = 20;
         Connection connection = null;
@@ -15,52 +17,48 @@ public class JDBCUtil5 extends JDBCUtilSettings {
         try {
 
             connection = DriverManager.getConnection(jdbcURL, username, password);
-            //foreign key checks uitzetten
-            DisableFKChecks(connection,"TitleEpisode");
-
             connection.setAutoCommit(false);
 
-            String sql = "INSERT INTO TitleEpisode (id, titleId, seasonNumber, episodeNumber) VALUES (?, ?, ?, ?)";
+            //foreign key checks uitzetten
+            DisableFKChecks(connection,"knowforTitles");
+
+            String sql = "INSERT INTO knowfortitles (personid, titlebasicsid) VALUES (?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             BufferedReader lineReader = new BufferedReader(new FileReader(csvFilePath));
             String lineText = null;
-
             int count = 0;
 
             lineReader.readLine(); // skip header line
 
             while ((lineText = lineReader.readLine()) != null) {
                 //ervoor zorgen dat hij uitzondering maakt voor "," in de tekst
-                String[] data = lineText.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
-                String id = data[0];
-                String titleId = data[1];
-                String seasonNumber = data[2];
-                String episodeNumber = data[3];
+                String[] data = lineText.split(",");
+                String personid = data[0];
+                for (int i = 1; i < data.length; i++ ) {
+                    String titlebasicsid = data[i];
 
-                id = id.replaceAll("\"", "");
-                titleId = titleId.replaceAll("\"","");
-                seasonNumber = seasonNumber.replaceAll("\"","");
-                episodeNumber = episodeNumber.replaceAll("\"","");
+                    personid = personid.replaceAll("\"", "");
+                    titlebasicsid = titlebasicsid.replaceAll("\"", "");
 
-                statement.setString(1, id);
-                statement.setString(2, titleId);
-                JDBCUtil.BirthYearNullCheck(statement, seasonNumber, episodeNumber);
+                    statement.setString(1, personid);
+                    statement.setString(2, titlebasicsid);
 
-                statement.addBatch();
+                    statement.addBatch();
 
-                if (count % batchSize == 0) {
+
                     statement.executeBatch();
+                    //System.out.println(personid+" and "+titlebasicsid);
                 }
             }
-            System.out.println("Done with Episodes");
+            System.out.println("Done with KnowFor");
+
             lineReader.close();
 
             // execute the remaining queries
             statement.executeBatch();
 
-            //en weer aanzetten..
-            EnableFKChecks(connection,"TitleEpisode");
+            EnableFKChecks(connection,"knowfortitles");
 
             connection.commit();
             connection.close();

@@ -1,5 +1,7 @@
 package com.datascience.bigmovie.base.UserInterface;
 
+import com.datascience.bigmovie.base.Database.*;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -64,8 +66,31 @@ public class DatabaseInterface {
         new SwingWorker<Void, String>() {
             @Override
             protected Void doInBackground() throws Exception {
-                // Do something here
-                Thread.sleep(4000);
+                Thread JDBC1 = new Thread(new JDBCUtil()::main);
+                Thread JDBC2 = new Thread(new JDBCUtil2()::main);
+                Thread JDBC3 = new Thread(new JDBCUtil3()::main);
+                Thread JDBC4 = new Thread(new JDBCUtil4()::main);
+                Thread JDBC5 = new Thread(new JDBCUtil5()::main);
+                Thread JDBC6 = new Thread(new JDBCUtil6()::main);
+                Thread JDBC7 = new Thread(new JDBCUtil7()::main);
+
+                JDBC1.start();
+                JDBC2.start();
+                JDBC3.start();
+                JDBC4.start();
+                JDBC5.start();
+                JDBC6.start();
+                JDBC7.start();
+
+                JDBC1.join();
+                JDBC2.join();
+                JDBC3.join();
+                JDBC4.join();
+                JDBC5.join();
+                JDBC6.join();
+                JDBC7.join();
+
+                done();
                 return null;
             }
 

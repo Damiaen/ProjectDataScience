@@ -3,12 +3,9 @@ package com.datascience.bigmovie.base.Database;
 import java.io.*;
 import java.sql.*;
 
-public class JDBCUtil {
+public class JDBCUtil extends JDBCUtilSettings {
 
-    public static void main() {
-        String jdbcURL = "jdbc:mysql://localhost:3306/moviedb";
-        String username = "root";
-        String password = "";
+    public void main() {
 
         String csvFilePath = "src/main/resources/database/csv/NameBasics.csv";
 
@@ -56,10 +53,9 @@ public class JDBCUtil {
 
                 if (count % batchSize == 0) {
                     statement.executeBatch();
-                    System.out.println(id);
                 }
             }
-
+            System.out.println("Done with Persons");
             lineReader.close();
 
             // execute the remaining queries

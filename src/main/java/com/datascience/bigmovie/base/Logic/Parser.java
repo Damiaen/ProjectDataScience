@@ -28,22 +28,20 @@ public class Parser {
         // IgnoredColumns and SplitColumns are based on an integer array, given integers will be used as indexes.
         // If no value is given for any of the integer arrays it will parse all the data.
 
-        // Actors table
-        this.columnsList.add(new Column("name.basics.tsv/data", "Actors", new Integer[]{5}, new Integer[]{}));
-        // Has played in movie table
-        this.columnsList.add(new Column("name.basics.tsv/data", "ActorHasPlayedIn", new Integer[]{1,2,3,4}, new Integer[]{5}));
-
-        // Movie title in original name
-        this.columnsList.add(new Column("title.akas.tsv/data","OriginalMovieName", new Integer[]{}, new Integer[]{}));
-        // Movie english title and general data (genre/playtime)
-        this.columnsList.add(new Column("title.basics.tsv/data","MovieName", new Integer[]{}, new Integer[]{}));
-
+        // All names and info
+        this.columnsList.add(new Column("name.basics.tsv/data", "NameBasics", new Integer[]{5}, new Integer[]{}));
+        // Movie title also know as
+        this.columnsList.add(new Column("title.akas.tsv/data", "TitleAKAS", new Integer[]{}, new Integer[]{}));
+        // Movie title basics
+        this.columnsList.add(new Column("title.basics.tsv/data", "TitleBasics", new Integer[]{}, new Integer[]{}));
         // Amount of seasons and episodes
-        this.columnsList.add(new Column("title.episode.tsv/data","Episodes", new Integer[]{}, new Integer[]{}));
+        this.columnsList.add(new Column("title.episode.tsv/data", "Episodes", new Integer[]{}, new Integer[]{}));
         // Movie roles and data
-        this.columnsList.add(new Column("title.principals.tsv/data","Principals", new Integer[]{}, new Integer[]{}));
+        this.columnsList.add(new Column("title.principals.tsv/data", "Principals", new Integer[]{}, new Integer[]{}));
         // Ratings for the movie/show
-        this.columnsList.add(new Column("title.ratings.tsv/data","Ratings", new Integer[]{}, new Integer[]{}));
+        this.columnsList.add(new Column("title.ratings.tsv/data", "Ratings", new Integer[]{}, new Integer[]{}));
+        //know for movies data
+        this.columnsList.add(new Column("name.basics.tsv/data", "TitlesKnowFor", new Integer[]{1,2,3,4}, new Integer[]{}));
 
         try {
             convertTSVToCSVFile(this.columnsList);

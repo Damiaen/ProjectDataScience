@@ -3,12 +3,9 @@ package com.datascience.bigmovie.base.Database;
 import java.io.*;
 import java.sql.*;
 
-public class JDBCUtil4 {
+public class JDBCUtil4 extends JDBCUtilSettings {
 
-    public static void main() {
-        String jdbcURL = "jdbc:mysql://localhost:3306/moviedb";
-        String username = "root";
-        String password = "";
+    public void main() {
 
         String csvFilePath = "src/main/resources/database/csv/Principals.csv";
 
@@ -19,8 +16,9 @@ public class JDBCUtil4 {
 
             connection = DriverManager.getConnection(jdbcURL, username, password);
             //foreign key checks uitzetten
+            DisableFKChecks(connection,"Principals");
             Statement stmt = connection.createStatement();
-            stmt.execute("SET FOREIGN_KEY_CHECKS=0");
+            stmt.execute("ALTER TABLE Principals DISABLE TRIGGER ALL;");
             stmt.close();
 
             connection.setAutoCommit(false);
@@ -65,10 +63,9 @@ public class JDBCUtil4 {
 
                 if (count % batchSize == 0) {
                     statement.executeBatch();
-                    System.out.println(titleId);
                 }
             }
-
+            System.out.println("Done with Principals");
             lineReader.close();
 
             // execute the remaining queries

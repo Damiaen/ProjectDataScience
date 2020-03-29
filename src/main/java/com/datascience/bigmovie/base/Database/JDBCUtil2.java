@@ -3,14 +3,9 @@ package com.datascience.bigmovie.base.Database;
 import java.io.*;
 import java.sql.*;
 
-public class JDBCUtil2 {
+public class JDBCUtil2 extends JDBCUtilSettings {
 
-    public static void main() {
-
-        String jdbcURL = "jdbc:mysql://localhost:3306/moviedb";
-        String username = "root";
-        String password = "";
-
+    public void main() {
 
         String csvFilePath = "src/main/resources/database/csv/TitleAKAS.csv";
 
@@ -21,9 +16,7 @@ public class JDBCUtil2 {
 
             connection = DriverManager.getConnection(jdbcURL, username, password);
             //foreign key checks uitzetten
-            Statement stmt = connection.createStatement();
-            stmt.execute("SET FOREIGN_KEY_CHECKS=0");
-            stmt.close();
+            DisableFKChecks(connection,"TitleAKAS");
 
             connection.setAutoCommit(false);
 
@@ -75,18 +68,15 @@ public class JDBCUtil2 {
 
                 if (count % batchSize == 0) {
                     statement.executeBatch();
-                    System.out.println(id);
                 }
             }
-
+            System.out.println("Done with TitleAKAS");
             lineReader.close();
 
             // execute the remaining queries
             statement.executeBatch();
             //en weer aanzetten..
-            Statement stmt2 = connection.createStatement();
-            stmt2.execute("SET FOREIGN_KEY_CHECKS=1");
-            stmt2.close();
+            EnableFKChecks(connection,"TitleAKAS");
             connection.commit();
             connection.close();
 
