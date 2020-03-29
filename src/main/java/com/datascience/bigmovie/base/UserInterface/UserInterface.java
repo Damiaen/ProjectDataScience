@@ -1,11 +1,16 @@
 package com.datascience.bigmovie.base.UserInterface;
 
+import com.datascience.bigmovie.base.Logic.DatabaseQuery;
+import com.datascience.bigmovie.base.Models.Answer;
+import com.datascience.bigmovie.base.Models.Column;
 import com.datascience.bigmovie.base.Models.Question;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -22,6 +27,11 @@ public class UserInterface extends JFrame{
     private JPanel content_panel;
     private JProgressBar questionProgressBar;
 
+    /**
+     * Instance of databaseQuery class
+     */
+    private DatabaseQuery databaseQuery = new DatabaseQuery();
+
     public String[] questionSelect = {
         "1. Welke actrices en acteurs spelen in meer dan 15 films met een ranking vanaf 8 sterren?",
         "2. Geef een top 15 lijst van films met een budget van onder de 30 miljoen met een ranking vanaf 8,5 sterren?",
@@ -33,6 +43,11 @@ public class UserInterface extends JFrame{
     };
 
     /**
+     * Instance of questions class
+     */
+    private List<Question> questions;
+
+    /**
      * Main JFrame IU, everything in the view is stored here
      */
     private JFrame userInterfaceFrame = new JFrame("Project DataScience - Groep 4");
@@ -40,6 +55,9 @@ public class UserInterface extends JFrame{
     public UserInterface(){
         // Create required elements for the JFrame
         createInterfaceElements();
+
+        // Get and set the available questions
+        getQuestions();
 
         // Event listeners that respond to button clicks
         button_parse.addActionListener(new ActionListener() {
@@ -61,9 +79,12 @@ public class UserInterface extends JFrame{
             }
         });
 
-        // Set Combobox content
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(questionSelect);
-        questions_list.setModel(model);
+        // Set Combobox content, TODO: Change this to use QuestionsList
+        questions_list.setModel(new DefaultComboBoxModel<>(questionSelect));
+    }
+
+    private void getQuestions() {
+        this.questions.add(new Question("Welke actrices en acteurs spelen in meer dan 15 films met een ranking vanaf 8 sterren?", "SELECT * FROM movies WHERE id = 1", "REGULAR", "src/main/resources/images/questionmark.jpg"));
     }
 
     /**
@@ -107,11 +128,16 @@ public class UserInterface extends JFrame{
         questionProgressBar.setVisible(true);
         questionProgressBar.setIndeterminate(true);
 
+        final Answer[] questionAnswer = new Answer[1];
+
         new SwingWorker<Void, String>() {
             @Override
             protected Void doInBackground() throws Exception {
+                // Get question from questions list, TODO: Make it so it gets it form the combobox
+                questionAnswer[0] = databaseQuery.askQuestion(questions.get(0));
+
                 // Temporary slowdown to simulate query, implement query function here
-                Thread.sleep(2000);
+                Thread.sleep(3000);
                 return null;
             }
 
@@ -125,11 +151,7 @@ public class UserInterface extends JFrame{
                 questions_list.setEnabled(true);
 
                 try {
-                    // Get data from combobox and set question, this is temporary for testing only
-                    String comboBoxValue = Objects.requireNonNull(questions_list.getSelectedItem()).toString();
-                    Question question = new Question(questions_list.getSelectedIndex(), comboBoxValue.toString(), "123", "src/main/resources/images/questionmark.jpg");
-
-                    new QuestionInterface(question);
+                    new QuestionInterface(questionAnswer[0]);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -39,7 +39,7 @@ public class DatabaseInterface {
      */
     private void createInterfaceElements() {
         parserInterfaceFrame.setContentPane(rootPanel);
-        parserInterfaceFrame.setSize(720,240);
+        parserInterfaceFrame.setSize(720,280);
         parserInterfaceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         parserInterfaceFrame.setVisible(true);
     }
