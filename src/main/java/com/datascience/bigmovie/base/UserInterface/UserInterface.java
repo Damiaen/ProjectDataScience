@@ -20,7 +20,7 @@ public class UserInterface extends JFrame{
     private JComboBox<String> questions_list;
     private JButton ask_question;
     private JPanel content_panel;
-    private JTextPane answer_content;
+    private JProgressBar questionProgressBar;
 
     public String[] questionSelect = {
         "1. Welke actrices en acteurs spelen in meer dan 15 films met een ranking vanaf 8 sterren?",
@@ -96,14 +96,41 @@ public class UserInterface extends JFrame{
 
     /**
      * Dispose of the main UI and open the QuestionBuilder UI
-     * TODO: Choose to run query here or on the QuestionInterface page
+     * TODO: Implement SQL Query Builder here
      */
     private void runQuestionBuilder() throws IOException {
-        // Get data from combobox and set question, this is temporary for testing only
-        String comboBoxValue = Objects.requireNonNull(questions_list.getSelectedItem()).toString();
-        Question question = new Question(questions_list.getSelectedIndex(), comboBoxValue.toString(), "123", "src/main/resources/images/questionmark.jpg");
+        button_parse.setEnabled(false);
+        button_build.setEnabled(false);
+        ask_question.setEnabled(false);
+        questionProgressBar.setVisible(true);
+        questionProgressBar.setIndeterminate(true);
 
-        // Don't dispose of the main UI and open the QuestionInterface with the selected question
-        new QuestionInterface(question);
+        new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                // Temporary slowdown to simulate query
+                Thread.sleep(2000);
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                questionProgressBar.setVisible(false);
+                questionProgressBar.setIndeterminate(false);
+                button_parse.setEnabled(true);
+                button_build.setEnabled(true);
+                ask_question.setEnabled(true);
+
+                try {
+                    // Get data from combobox and set question, this is temporary for testing only
+                    String comboBoxValue = Objects.requireNonNull(questions_list.getSelectedItem()).toString();
+                    Question question = new Question(questions_list.getSelectedIndex(), comboBoxValue.toString(), "123", "src/main/resources/images/questionmark.jpg");
+
+                    new QuestionInterface(question);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute();
     }
 }

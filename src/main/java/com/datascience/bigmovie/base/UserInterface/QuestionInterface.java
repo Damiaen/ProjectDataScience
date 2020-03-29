@@ -29,8 +29,6 @@ public class QuestionInterface {
         this.question = question;
         // Create required elements for the JFrame
         createInterfaceElements();
-
-        // TODO: Implement Question Querying here
     }
 
     /**
