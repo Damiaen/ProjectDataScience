@@ -60,4 +60,14 @@ public class Question {
         return imagePath;
     }
 
+    /**
+     * We override this so the comboboxModel can get the correct field
+     *
+     * * @return title = Long title of question
+     */
+    @Override
+    public String toString() {
+        return title;
+    }
+
 }
