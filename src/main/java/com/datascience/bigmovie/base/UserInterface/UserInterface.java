@@ -1,8 +1,11 @@
 package com.datascience.bigmovie.base.UserInterface;
 
+import com.datascience.bigmovie.base.Models.Question;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -17,7 +20,7 @@ public class UserInterface extends JFrame{
     private JComboBox<String> questions_list;
     private JButton ask_question;
     private JPanel content_panel;
-    private JTextPane answer_content;
+    private JProgressBar questionProgressBar;
 
     public String[] questionSelect = {
         "1. Welke actrices en acteurs spelen in meer dan 15 films met een ranking vanaf 8 sterren?",
@@ -50,7 +53,11 @@ public class UserInterface extends JFrame{
         ask_question.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                runQuestionBuilder();
+                try {
+                    runQuestionBuilder();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -64,7 +71,7 @@ public class UserInterface extends JFrame{
      */
     private void createInterfaceElements() {
         userInterfaceFrame.setContentPane(rootPanel);
-        userInterfaceFrame.setSize(720,480);
+        userInterfaceFrame.setSize(720,340);
         userInterfaceFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         userInterfaceFrame.setVisible(true);
     }
@@ -88,14 +95,45 @@ public class UserInterface extends JFrame{
     }
 
     /**
-     * Run the question Builder function and ask an question to the database
+     * Dispose of the main UI and open the QuestionBuilder UI
+     * TODO: Implement SQL Query Builder here
+     * TODO: Cleanup disabling of buttons
      */
-    private void runQuestionBuilder() {
-        String comboBoxValue = Objects.requireNonNull(questions_list.getSelectedItem()).toString();
-        int comboBoxSelectedIndex = questions_list.getSelectedIndex();
+    private void runQuestionBuilder() throws IOException {
+        button_parse.setEnabled(false);
+        button_build.setEnabled(false);
+        ask_question.setEnabled(false);
+        questions_list.setEnabled(false);
+        questionProgressBar.setVisible(true);
+        questionProgressBar.setIndeterminate(true);
 
-        // Log question index and value, also change text field to comboBox value
-        System.out.println("selected question index:" + comboBoxSelectedIndex + ". Question: " + comboBoxValue);
-        answer_content.setText(comboBoxValue);
+        new SwingWorker<Void, String>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                // Temporary slowdown to simulate query, implement query function here
+                Thread.sleep(2000);
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                questionProgressBar.setVisible(false);
+                questionProgressBar.setIndeterminate(false);
+                button_parse.setEnabled(true);
+                button_build.setEnabled(true);
+                ask_question.setEnabled(true);
+                questions_list.setEnabled(true);
+
+                try {
+                    // Get data from combobox and set question, this is temporary for testing only
+                    String comboBoxValue = Objects.requireNonNull(questions_list.getSelectedItem()).toString();
+                    Question question = new Question(questions_list.getSelectedIndex(), comboBoxValue.toString(), "123", "src/main/resources/images/questionmark.jpg");
+
+                    new QuestionInterface(question);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }.execute();
     }
 }
