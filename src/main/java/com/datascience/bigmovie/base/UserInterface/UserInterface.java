@@ -1,8 +1,11 @@
 package com.datascience.bigmovie.base.UserInterface;
 
+import com.datascience.bigmovie.base.Models.Question;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -50,7 +53,11 @@ public class UserInterface extends JFrame{
         ask_question.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                runQuestionBuilder();
+                try {
+                    runQuestionBuilder();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -88,14 +95,15 @@ public class UserInterface extends JFrame{
     }
 
     /**
-     * Run the question Builder function and ask an question to the database
+     * Dispose of the main UI and open the QuestionBuilder UI
+     * TODO: Choose to run query here or on the QuestionInterface page
      */
-    private void runQuestionBuilder() {
+    private void runQuestionBuilder() throws IOException {
+        // Get data from combobox and set question, this is temporary for testing only
         String comboBoxValue = Objects.requireNonNull(questions_list.getSelectedItem()).toString();
-        int comboBoxSelectedIndex = questions_list.getSelectedIndex();
+        Question question = new Question(questions_list.getSelectedIndex(), comboBoxValue.toString(), "123", "src/main/resources/images/questionmark.jpg");
 
-        // Log question index and value, also change text field to comboBox value
-        System.out.println("selected question index:" + comboBoxSelectedIndex + ". Question: " + comboBoxValue);
-        answer_content.setText(comboBoxValue);
+        // Don't dispose of the main UI and open the QuestionInterface with the selected question
+        new QuestionInterface(question);
     }
 }
