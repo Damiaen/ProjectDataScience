@@ -15,7 +15,7 @@ class JDBCUtilMaster
 
     String jdbcURL = "jdbc:postgresql://localhost:5432/movieDB";
     String username = "postgres";
-    String password = "";
+    String password = "zelfietsinvullen";
 
     int batchSize = 20;
 

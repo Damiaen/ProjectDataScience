@@ -19,7 +19,7 @@ public class JDBCUtil4 extends JDBCUtilMaster {
 
             connection.setAutoCommit(false);
 
-            String sql = "INSERT INTO Principals (personId, titleId, ordening, category, job) VALUES (?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO Principals (personId, titleId, ordening, category) VALUES (?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 
             BufferedReader lineReader = new BufferedReader(new FileReader(csvFilePath));
@@ -36,19 +36,16 @@ public class JDBCUtil4 extends JDBCUtilMaster {
                 String ordening = data[1];
                 String titleId = data[0];
                 String category = data[3];
-                String job = data[4];
 
                 personId = personId.replaceAll("\"","");
                 ordening = ordening.replaceAll("\"","");
                 titleId = titleId.replaceAll("\"","");
                 category = category.replaceAll("\"","");
-                job = job.replaceAll("\"","");
 
                 statement.setString(1, personId);
                 statement.setInt(3, Integer.parseInt(ordening));
                 statement.setString(2, titleId);
                 statement.setString(4, category);
-                statement.setString(5, job);
 
                 statement.addBatch();
 
