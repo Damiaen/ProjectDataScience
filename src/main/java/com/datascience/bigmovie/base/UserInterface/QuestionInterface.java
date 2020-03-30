@@ -1,7 +1,6 @@
 package com.datascience.bigmovie.base.UserInterface;
 
 import com.datascience.bigmovie.base.Models.Answer;
-import com.datascience.bigmovie.base.Models.Question;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -9,6 +8,10 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+
+import org.knowm.xchart.*;
+import org.knowm.xchart.style.Styler;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science
@@ -19,17 +22,118 @@ public class QuestionInterface {
     private JPanel rootPanel;
     private JLabel pageTitle;
     private JLabel imageLabel;
+    private JPanel titlePanel;
+    private JPanel imagePanel;
 
     private JFrame questionInterfaceFrame = new JFrame("Project DataScience - Groep 4 - Ask Question");
     private Answer answer;
+
     /**
      * Requires an question
      */
     public QuestionInterface(Answer answer) throws IOException {
         // Assign question data to the local question variable
         this.answer = answer;
-        // Create required elements for the JFrame
+        // Create required base elements for the JFrame
         createInterfaceElements();
+        // Look at the answer itself and build the UI further based on the params
+        createAnswerElements();
+    }
+
+    /**
+     * Create and display answer elements based on type value
+     * TODO: Replace temp data with data form question
+     */
+    private void createAnswerElements() throws IOException {
+        // Below is some temporary test data, this should be replaced later on
+        double[] xData = new double[] { 0.0, 1.0, 2.0 };
+        double[] yData = new double[] { 2.0, 1.0, 0.0 };
+
+
+
+        switch(answer.getType()) {
+            case "XY_CHART":
+                createXYChart(xData,yData);
+                break;
+            case "CATEGORY_CHART":
+                createCategoryChart();
+                break;
+            case "PIE_CHART":
+                createPieChart(xData,yData);
+                break;
+            case "IMAGE":
+                AddImage();
+                break;
+            default:
+        }
+    }
+
+    private void createCategoryChart() {
+        // Create Chart
+        CategoryChart chart =
+                new CategoryChartBuilder()
+                        .width(800)
+                        .height(600)
+                        .title("Score Histogram")
+                        .xAxisTitle("Score")
+                        .yAxisTitle("Number")
+                        .build();
+
+        // Customize Chart
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
+        chart.getStyler().setHasAnnotations(true);
+        chart.getStyler().setPlotGridLinesVisible(false);
+
+        // Series
+        chart.addSeries("test 1", Arrays.asList(0, 1, 2, 3, 4), Arrays.asList(4, 5, 9, 6, 5));
+
+        JPanel chartPanel = new XChartPanel<>(chart);
+
+
+        imagePanel.setLayout(new java.awt.BorderLayout());
+        imagePanel.add(chartPanel, BorderLayout.CENTER);
+        imagePanel.validate();
+    }
+
+    /**
+     * create an XY Chart based on xData and yData
+     * @param xData = data for x axis
+     * @param yData = data for y axis
+     */
+    public void createXYChart(double[] xData, double[] yData) {
+        XYChart chart = QuickChart.getChart("Sample Chart", "X", "Y", "y(x)", xData, yData);
+        JPanel chartPanel = new XChartPanel<>(chart);
+        imagePanel.setLayout(new java.awt.BorderLayout());
+        imagePanel.add(chartPanel, BorderLayout.CENTER);
+        imagePanel.validate();
+    }
+
+    /**
+     * create an Pie Chart based on data from the answer
+     * @param xData = data for x axis
+     * @param yData = data for y axis
+     */
+    public void createPieChart(double[] xData, double[] yData) {
+        PieChart chart = new PieChartBuilder().width(800).height(600).title("Pie Chart with 4 Slices").build();
+
+        // Customize Chart
+        chart.getStyler().setCircular(false);
+
+        // Series
+        chart.addSeries("Pennies", 100);
+        chart.addSeries("Nickels", 100);
+        chart.addSeries("Dimes", 100);
+        chart.addSeries("Quarters", 100);
+
+        JPanel chartPanel = new XChartPanel<>(chart);
+        imagePanel.setLayout(new java.awt.BorderLayout());
+        imagePanel.add(chartPanel, BorderLayout.CENTER);
+        imagePanel.validate();
+    }
+
+    private void AddImage() throws IOException {
+        BufferedImage questionImage = ImageIO.read(new File(answer.getImagePath()));
+        imageLabel.setIcon(new ImageIcon(questionImage.getScaledInstance(280, 280, Image.SCALE_FAST)));
     }
 
     /**
@@ -44,9 +148,6 @@ public class QuestionInterface {
         //Temporary debug stuff
         answer_content.setText(answer.getContent());
         pageTitle.setText(answer.getTitle());
-
-        BufferedImage questionImage = ImageIO.read(new File(answer.getImagePath()));
-        imageLabel.setIcon(new ImageIcon(questionImage.getScaledInstance(280, 280, Image.SCALE_FAST)));
     }
 
     /**

@@ -80,10 +80,10 @@ public class UserInterface extends JFrame{
      * TODO: Clean this up?
      */
     private void getQuestions() {
-        this.questions.add(new Question("1. Welke actrices en acteurs spelen in meer dan 15 films met een ranking vanaf 8 sterren?", "SELECT * FROM movies WHERE id = 1", "REGULAR", "src/main/resources/images/questionmark.jpg"));
-        this.questions.add(new Question("2. Geef een top 15 lijst van films met een budget van onder de 30 miljoen met een ranking vanaf 8,5 sterren?", "SELECT * FROM movies WHERE id = 1", "REGULAR", "src/main/resources/images/questionmark.jpg"));
-        this.questions.add(new Question("3. Geef een top 25 lijst van films met de meeste uitgaven? (Betekent een hoger budget per se een betere/succesvollere film?)", "SELECT * FROM movies WHERE id = 1", "REGULAR", "src/main/resources/images/questionmark.jpg"));
-        this.questions.add(new Question("4. Geef een overzicht waarbij de schrijver ook de regisseur was bij het maken een film? Neem hier een rating boven de 9.", "SELECT * FROM movies WHERE id = 1", "REGULAR", "src/main/resources/images/questionmark.jpg"));
+        this.questions.add(new Question("1. Welke actrices en acteurs spelen in meer dan 15 films met een ranking vanaf 8 sterren?", "SELECT * FROM movies WHERE id = 1", "XY_CHART", "src/main/resources/images/questionmark.jpg"));
+        this.questions.add(new Question("2. Geef een top 15 lijst van films met een budget van onder de 30 miljoen met een ranking vanaf 8,5 sterren?", "SELECT * FROM movies WHERE id = 1", "CATEGORY_CHART", "src/main/resources/images/questionmark.jpg"));
+        this.questions.add(new Question("3. Geef een top 25 lijst van films met de meeste uitgaven? (Betekent een hoger budget per se een betere/succesvollere film?)", "SELECT * FROM movies WHERE id = 1", "PIE_CHART", "src/main/resources/images/questionmark.jpg"));
+        this.questions.add(new Question("4. Geef een overzicht waarbij de schrijver ook de regisseur was bij het maken een film? Neem hier een rating boven de 9.", "SELECT * FROM movies WHERE id = 1", "IMAGE", "src/main/resources/images/questionmark.jpg"));
         this.questions.add(new Question("5. Welke genre wordt het meest bekeken als je alle films pakt vanaf 8,8 sterren?", "SELECT * FROM movies WHERE id = 1", "REGULAR", "src/main/resources/images/questionmark.jpg"));
         this.questions.add(new Question("6. Geef een top 15 lijst met films waar de draai tijd het langs heeft geduurd?(geeft dit uitzonderlijk verschil)", "SELECT * FROM movies WHERE id = 1", "REGULAR", "src/main/resources/images/questionmark.jpg"));
         this.questions.add(new Question("7. Geef top 15 lijst met films met een ranking vanaf 9,5sterren maar hebben het laagste productiebudget?", "SELECT * FROM movies WHERE id = 1", "REGULAR", "src/main/resources/images/questionmark.jpg"));

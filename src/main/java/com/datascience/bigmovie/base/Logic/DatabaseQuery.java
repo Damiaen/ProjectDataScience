@@ -28,6 +28,6 @@ public class DatabaseQuery {
      */
     private Answer runQuery(Question question) throws IOException{
         System.out.println("Running Query on database: " + question.getQuery());
-        return new Answer(question.getTitle(), "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut volutpat nulla enim, non ornare nunc faucibus nec. Suspendisse ut elit et nisi molestie efficitur. Donec sollicitudin ultricies nisl, ultricies interdum ex lacinia in.", question.getImagePath());
+        return new Answer(question.getTitle(), "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut volutpat nulla enim, non ornare nunc faucibus nec. Suspendisse ut elit et nisi molestie efficitur. Donec sollicitudin ultricies nisl, ultricies interdum ex lacinia in.", question.getType(),  question.getImagePath());
     }
 }
