@@ -1,11 +1,17 @@
 package com.datascience.bigmovie.base.UserInterface;
 
+import com.datascience.bigmovie.base.Logic.DatabaseQuery;
+import com.datascience.bigmovie.base.Models.Answer;
+import com.datascience.bigmovie.base.Models.Column;
 import com.datascience.bigmovie.base.Models.Question;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -17,20 +23,20 @@ public class UserInterface extends JFrame{
     private JButton button_build;
     private JPanel buttons_panel;
     private JPanel questions_panel;
-    private JComboBox<String> questions_list;
+    private JComboBox<Question> questions_list;
     private JButton ask_question;
     private JPanel content_panel;
     private JProgressBar questionProgressBar;
 
-    public String[] questionSelect = {
-        "1. Welke actrices en acteurs spelen in meer dan 15 films met een ranking vanaf 8 sterren?",
-        "2. Geef een top 15 lijst van films met een budget van onder de 30 miljoen met een ranking vanaf 8,5 sterren?",
-        "3. Geef een top 25 lijst van films met de meeste uitgaven? (Betekent een hoger budget per se een betere/succesvollere film?)",
-        "4. Geef een overzicht waarbij de schrijver ook de regisseur was bij het maken een film? Neem hier een rating boven de 9.",
-        "5. Welke genre wordt het meest bekeken als je alle films pakt vanaf 8,8 sterren?",
-        "6. Geef een top 15 lijst met films waar de draai tijd het langs heeft geduurd?(geeft dit uitzonderlijk verschil)",
-        "7. Geef top 15 lijst met films met een ranking vanaf 9,5sterren maar hebben het laagste productiebudget?",
-    };
+    /**
+     * Instance of databaseQuery class
+     */
+    private DatabaseQuery databaseQuery = new DatabaseQuery();
+
+    /**
+     * Instance of questions class
+     */
+    private List<Question> questions = new ArrayList<Question>();
 
     /**
      * Main JFrame IU, everything in the view is stored here
@@ -40,6 +46,9 @@ public class UserInterface extends JFrame{
     public UserInterface(){
         // Create required elements for the JFrame
         createInterfaceElements();
+
+        // Get and set the available questions
+        getQuestions();
 
         // Event listeners that respond to button clicks
         button_parse.addActionListener(new ActionListener() {
@@ -61,9 +70,23 @@ public class UserInterface extends JFrame{
             }
         });
 
-        // Set Combobox content
-        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>(questionSelect);
+        // Set Combobox content, based on questions in questions list
+        DefaultComboBoxModel<Question> model = new DefaultComboBoxModel<>(questions.toArray(new Question[0]));
         questions_list.setModel(model);
+    }
+
+    /**
+     * Set all the questions related stuff here
+     * TODO: Clean this up?
+     */
+    private void getQuestions() {
+        this.questions.add(new Question("1. Welke actrices en acteurs spelen in meer dan 15 films met een ranking vanaf 8 sterren?", "SELECT * FROM movies WHERE id = 1", "XY_CHART", "src/main/resources/images/questionmark.jpg"));
+        this.questions.add(new Question("2. Geef een top 15 lijst van films met een budget van onder de 30 miljoen met een ranking vanaf 8,5 sterren?", "SELECT * FROM movies WHERE id = 1", "CATEGORY_CHART", "src/main/resources/images/questionmark.jpg"));
+        this.questions.add(new Question("3. Geef een top 25 lijst van films met de meeste uitgaven? (Betekent een hoger budget per se een betere/succesvollere film?)", "SELECT * FROM movies WHERE id = 1", "PIE_CHART", "src/main/resources/images/questionmark.jpg"));
+        this.questions.add(new Question("4. Geef een overzicht waarbij de schrijver ook de regisseur was bij het maken een film? Neem hier een rating boven de 9.", "SELECT * FROM movies WHERE id = 1", "IMAGE", "src/main/resources/images/questionmark.jpg"));
+        this.questions.add(new Question("5. Welke genre wordt het meest bekeken als je alle films pakt vanaf 8,8 sterren?", "SELECT * FROM movies WHERE id = 1", "REGULAR", "src/main/resources/images/questionmark.jpg"));
+        this.questions.add(new Question("6. Geef een top 15 lijst met films waar de draai tijd het langs heeft geduurd?(geeft dit uitzonderlijk verschil)", "SELECT * FROM movies WHERE id = 1", "REGULAR", "src/main/resources/images/questionmark.jpg"));
+        this.questions.add(new Question("7. Geef top 15 lijst met films met een ranking vanaf 9,5sterren maar hebben het laagste productiebudget?", "SELECT * FROM movies WHERE id = 1", "REGULAR", "src/main/resources/images/questionmark.jpg"));
     }
 
     /**
@@ -94,6 +117,10 @@ public class UserInterface extends JFrame{
         userInterfaceFrame.dispose();
     }
 
+    private Question getQuestion(Integer index) {
+        return Objects.requireNonNull(questions.get(index));
+    }
+
     /**
      * Dispose of the main UI and open the QuestionBuilder UI
      * TODO: Implement SQL Query Builder here
@@ -107,11 +134,16 @@ public class UserInterface extends JFrame{
         questionProgressBar.setVisible(true);
         questionProgressBar.setIndeterminate(true);
 
+        final Answer[] questionAnswer = new Answer[1];
+
         new SwingWorker<Void, String>() {
             @Override
             protected Void doInBackground() throws Exception {
-                // Temporary slowdown to simulate query, implement query function here
-                Thread.sleep(2000);
+                // Get question from questions list and run the query
+                questionAnswer[0] = databaseQuery.askQuestion(getQuestion(questions_list.getSelectedIndex()));
+
+                // Temporary slowdown to simulate query
+                Thread.sleep(3000);
                 return null;
             }
 
@@ -125,11 +157,7 @@ public class UserInterface extends JFrame{
                 questions_list.setEnabled(true);
 
                 try {
-                    // Get data from combobox and set question, this is temporary for testing only
-                    String comboBoxValue = Objects.requireNonNull(questions_list.getSelectedItem()).toString();
-                    Question question = new Question(questions_list.getSelectedIndex(), comboBoxValue.toString(), "123", "src/main/resources/images/questionmark.jpg");
-
-                    new QuestionInterface(question);
+                    new QuestionInterface(questionAnswer[0]);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
