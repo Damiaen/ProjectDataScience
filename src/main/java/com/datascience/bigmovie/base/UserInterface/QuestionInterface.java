@@ -46,20 +46,18 @@ public class QuestionInterface {
      */
     private void createAnswerElements() throws IOException {
         // Below is some temporary test data, this should be replaced later on
-        double[] xData = new double[] { 0.0, 1.0, 2.0 };
-        double[] yData = new double[] { 2.0, 1.0, 0.0 };
+        double[] xData = new double[]{0.0, 1.0, 2.0};
+        double[] yData = new double[]{2.0, 1.0, 0.0};
 
-
-
-        switch(answer.getType()) {
+        switch (answer.getType()) {
             case "XY_CHART":
-                createXYChart(xData,yData);
+                createXYChart(xData, yData);
                 break;
             case "CATEGORY_CHART":
                 createCategoryChart();
                 break;
             case "PIE_CHART":
-                createPieChart(xData,yData);
+                createPieChart(xData, yData);
                 break;
             case "IMAGE":
                 AddImage();
@@ -87,50 +85,58 @@ public class QuestionInterface {
         // Series
         chart.addSeries("test 1", Arrays.asList(0, 1, 2, 3, 4), Arrays.asList(4, 5, 9, 6, 5));
 
-        JPanel chartPanel = new XChartPanel<>(chart);
-
-
-        imagePanel.setLayout(new java.awt.BorderLayout());
-        imagePanel.add(chartPanel, BorderLayout.CENTER);
-        imagePanel.validate();
+        // Add the element to the imagePanel
+        addToPanel(new XChartPanel<>(chart));
     }
 
     /**
      * create an XY Chart based on xData and yData
+     *
      * @param xData = data for x axis
      * @param yData = data for y axis
      */
-    public void createXYChart(double[] xData, double[] yData) {
+    private void createXYChart(double[] xData, double[] yData) {
+        // Create XYChart
         XYChart chart = QuickChart.getChart("Sample Chart", "X", "Y", "y(x)", xData, yData);
-        JPanel chartPanel = new XChartPanel<>(chart);
-        imagePanel.setLayout(new java.awt.BorderLayout());
-        imagePanel.add(chartPanel, BorderLayout.CENTER);
-        imagePanel.validate();
+        // Add the element to the imagePanel
+        addToPanel(new XChartPanel<>(chart));
     }
 
     /**
      * create an Pie Chart based on data from the answer
+     *
      * @param xData = data for x axis
      * @param yData = data for y axis
      */
-    public void createPieChart(double[] xData, double[] yData) {
+    private void createPieChart(double[] xData, double[] yData) {
         PieChart chart = new PieChartBuilder().width(800).height(600).title("Pie Chart with 4 Slices").build();
 
         // Customize Chart
         chart.getStyler().setCircular(false);
 
         // Series
+        // TODO: for loop through list of items from query
         chart.addSeries("Pennies", 100);
         chart.addSeries("Nickels", 100);
         chart.addSeries("Dimes", 100);
         chart.addSeries("Quarters", 100);
 
-        JPanel chartPanel = new XChartPanel<>(chart);
+        // Add the element to the imagePanel
+        addToPanel(new XChartPanel<>(chart));
+    }
+
+    /**
+     * Add element to imagePanel
+     */
+    private void addToPanel(JPanel chartPanel) {
         imagePanel.setLayout(new java.awt.BorderLayout());
         imagePanel.add(chartPanel, BorderLayout.CENTER);
         imagePanel.validate();
     }
 
+    /**
+     * Add image, path is from answer
+     */
     private void AddImage() throws IOException {
         BufferedImage questionImage = ImageIO.read(new File(answer.getImagePath()));
         imageLabel.setIcon(new ImageIcon(questionImage.getScaledInstance(280, 280, Image.SCALE_FAST)));
@@ -141,7 +147,7 @@ public class QuestionInterface {
      */
     private void createInterfaceElements() throws IOException {
         questionInterfaceFrame.setContentPane(rootPanel);
-        questionInterfaceFrame.setSize(940,480);
+        questionInterfaceFrame.setSize(940, 480);
         questionInterfaceFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         questionInterfaceFrame.setVisible(true);
 
