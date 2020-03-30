@@ -9,14 +9,15 @@ import java.sql.Statement;
  * @author Mathijs Grafhorst, team 4,  Project Data Science
  */
 
-class JDBCUtilSettings
+class JDBCUtilMaster
 {
     //enter database connection settings here
 
     String jdbcURL = "jdbc:postgresql://localhost:5432/movieDB";
     String username = "postgres";
-    String password = "";
+    String password = "Ph@r0s!3";
 
+    int batchSize = 20;
 
     void DisableFKChecks(Connection connection,String table) throws SQLException {
 

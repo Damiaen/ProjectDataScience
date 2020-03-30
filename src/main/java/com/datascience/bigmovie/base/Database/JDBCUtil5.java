@@ -3,13 +3,12 @@ package com.datascience.bigmovie.base.Database;
 import java.io.*;
 import java.sql.*;
 
-public class JDBCUtil5 extends JDBCUtilSettings {
+public class JDBCUtil5 extends JDBCUtilMaster {
 
     public void main() {
 
         String csvFilePath = "src/main/resources/database/csv/Episodes.csv";
 
-        int batchSize = 20;
         Connection connection = null;
 
         try {

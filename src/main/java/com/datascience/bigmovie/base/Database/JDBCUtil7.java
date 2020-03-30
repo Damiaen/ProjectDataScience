@@ -5,13 +5,12 @@ import java.sql.*;
 /**
  * @author Mathijs Grafhorst, team 4,  Project Data Science
  */
-public class JDBCUtil7 extends JDBCUtilSettings {
+public class JDBCUtil7 extends JDBCUtilMaster {
 
     public void main() {
 
         String csvFilePath = "src/main/resources/database/csv/TitlesKnowFor.csv";
 
-        int batchSize = 20;
         Connection connection = null;
 
         try {

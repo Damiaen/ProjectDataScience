@@ -3,13 +3,12 @@ package com.datascience.bigmovie.base.Database;
 import java.io.*;
 import java.sql.*;
 
-public class JDBCUtil6 extends JDBCUtilSettings {
+public class JDBCUtil6 extends JDBCUtilMaster {
 
     public void main() {
 
         String csvFilePath = "src/main/resources/database/csv/Ratings.csv";
 
-        int batchSize = 20;
         Connection connection = null;
 
         try {
@@ -19,7 +18,6 @@ public class JDBCUtil6 extends JDBCUtilSettings {
             DisableFKChecks(connection,"TitleRating");
 
             connection.setAutoCommit(false);
-
             String sql = "INSERT INTO TitleRating (titleId, averageRating, numVotes) VALUES (?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
 

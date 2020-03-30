@@ -37,7 +37,7 @@ public class Parser {
         // Amount of seasons and episodes
         this.columnsList.add(new Column("title.episode.tsv/data", "Episodes", new Integer[]{}, new Integer[]{}));
         // Movie roles and data
-        this.columnsList.add(new Column("title.principals.tsv/data", "Principals", new Integer[]{}, new Integer[]{}));
+        this.columnsList.add(new Column("title.principals.tsv/data", "Principals", new Integer[]{5}, new Integer[]{}));
         // Ratings for the movie/show
         this.columnsList.add(new Column("title.ratings.tsv/data", "Ratings", new Integer[]{}, new Integer[]{}));
         //know for movies data
