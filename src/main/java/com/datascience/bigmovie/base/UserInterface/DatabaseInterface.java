@@ -66,6 +66,8 @@ public class DatabaseInterface {
         new SwingWorker<Void, String>() {
             @Override
             protected Void doInBackground() throws Exception {
+
+                /*
                 Thread JDBC1 = new Thread(new JDBCUtil()::main);
                 Thread JDBC2 = new Thread(new JDBCUtil2()::main);
                 Thread JDBC3 = new Thread(new JDBCUtil3()::main);
@@ -89,6 +91,10 @@ public class DatabaseInterface {
                 JDBC5.join();
                 JDBC6.join();
                 JDBC7.join();
+                */
+                Thread JDBC8 = new Thread(new JDBCUtil8()::main);
+                JDBC8.start();
+                JDBC8.join();
 
                 done();
                 return null;

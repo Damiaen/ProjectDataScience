@@ -43,6 +43,8 @@ public class Parser {
         //know for movies data
         this.columnsList.add(new Column("name.basics.tsv/data", "TitlesKnowFor", new Integer[]{1,2,3,4}, new Integer[]{}));
 
+        this.columnsList.add(new Column("title.crew.tsv/data", "crewData", new Integer[]{2}, new Integer[]{}));
+
         try {
             convertTSVToCSVFile(this.columnsList);
         } catch (IOException e) {
