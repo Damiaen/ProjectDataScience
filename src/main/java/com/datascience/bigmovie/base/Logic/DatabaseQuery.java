@@ -12,9 +12,9 @@ import java.util.ArrayList;
  */
 public class DatabaseQuery {
 
-    private String jdbcURL = "jdbc:postgresql://localhost:5432/postgres";
-    private String username = "postgres";
-    private String password = "1234";
+    private final String jdbcURL = "jdbc:postgresql://localhost:5432/postgres";
+    private final String username = "postgres";
+    private final String password = "1234";
 
     /**
      * Get the question and run the query

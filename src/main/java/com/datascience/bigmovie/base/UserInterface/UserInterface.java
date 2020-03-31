@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -115,41 +114,54 @@ public class UserInterface extends JFrame{
         userInterfaceFrame.dispose();
     }
 
+    /**
+     * Get question by index
+     */
     private Question getQuestion(Integer index) {
         return Objects.requireNonNull(questions.get(index));
     }
 
     /**
+     * Toggle the enabled value of the buttons on and off
+     */
+    private void toggleButtons(Boolean toggle) {
+        button_parse.setEnabled(toggle);
+        button_build.setEnabled(toggle);
+        ask_question.setEnabled(toggle);
+        questions_list.setEnabled(toggle);
+    }
+
+    /**
+     * Toggle the loader enabled value of the buttons on and off
+     */
+    private void toggleLoader(Boolean toggle) {
+        questionProgressBar.setVisible(toggle);
+        questionProgressBar.setIndeterminate(toggle);
+    }
+
+    /**
      * Dispose of the main UI and open the QuestionBuilder UI
-     * TODO: Implement SQL Query Builder here
-     * TODO: Cleanup disabling of buttons
      */
     private void runQuestionBuilder() throws IOException {
-        button_parse.setEnabled(false);
-        button_build.setEnabled(false);
-        ask_question.setEnabled(false);
-        questions_list.setEnabled(false);
-        questionProgressBar.setVisible(true);
-        questionProgressBar.setIndeterminate(true);
+        // Turn buttons off and start loader
+        toggleButtons(false);
+        toggleLoader(true);
 
         final Answer[] questionAnswer = new Answer[1];
 
         new SwingWorker<Void, String>() {
             @Override
             protected Void doInBackground() throws Exception {
-                // Get question from questions list and run the query
+                // Get question from questions list and run the query, since we are in an inner class we do this
                 questionAnswer[0] = databaseQuery.askQuestion(getQuestion(questions_list.getSelectedIndex()));
                 return null;
             }
 
             @Override
             protected void done() {
-                questionProgressBar.setVisible(false);
-                questionProgressBar.setIndeterminate(false);
-                button_parse.setEnabled(true);
-                button_build.setEnabled(true);
-                ask_question.setEnabled(true);
-                questions_list.setEnabled(true);
+                // Re-enable buttons off and turn the loader off
+                toggleButtons(true);
+                toggleLoader(false);
 
                 try {
                     new QuestionInterface(questionAnswer[0]);

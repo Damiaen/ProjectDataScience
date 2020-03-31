@@ -11,8 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
@@ -48,7 +46,7 @@ public class QuestionInterface {
 
     /**
      * Check if we need to create an graph or not, else show default question mark
-     * TODO: XY_CHART and CATEGORY_CHART
+     * TODO: XY_CHART
      */
     private void createAnswerElements() throws IOException {
         switch (answer.getType()) {
@@ -156,8 +154,8 @@ public class QuestionInterface {
      * Add image, this is the default option
      */
     private void addImage() throws IOException {
-        BufferedImage questionImage = ImageIO.read(new File("src/main/resources/images/questionmark.jpg"));
-        imageLabel.setIcon(new ImageIcon(questionImage.getScaledInstance(280, 280, Image.SCALE_FAST)));
+        BufferedImage questionImage = ImageIO.read(new File("src/main/resources/images/question.png"));
+        imageLabel.setIcon(new ImageIcon(questionImage.getScaledInstance(240, 380, Image.SCALE_SMOOTH)));
     }
 
     /**
@@ -165,7 +163,7 @@ public class QuestionInterface {
      */
     private void createInterfaceElements() throws IOException {
         questionInterfaceFrame.setContentPane(rootPanel);
-        questionInterfaceFrame.setSize(940, 480);
+        questionInterfaceFrame.setSize(1000, 620);
         questionInterfaceFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         questionInterfaceFrame.setVisible(true);
 
@@ -173,17 +171,12 @@ public class QuestionInterface {
         pageTitle.setText(answer.getTitle());
     }
 
+    /**
+     * Build the answer content, content is based on unique id of question/answer
+     */
     private String buildAnswerContent() {
         String finalContent = questionContentBuilder.buildAnswer(answer);
         System.out.println("Final content string: " + finalContent);
         return finalContent;
-    }
-
-    /**
-     * Return to the main UI view
-     */
-    private void exitPage() {
-        questionInterfaceFrame.setVisible(false);
-        questionInterfaceFrame.dispose();
     }
 }
