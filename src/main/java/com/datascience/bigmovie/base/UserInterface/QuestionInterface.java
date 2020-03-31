@@ -1,6 +1,7 @@
 package com.datascience.bigmovie.base.UserInterface;
 
-import com.datascience.bigmovie.base.Models.Answer;
+import com.datascience.bigmovie.base.Logic.QuestionContentBuilder;
+import com.datascience.bigmovie.base.models.Answer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -8,6 +9,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.knowm.xchart.*;
@@ -26,6 +28,7 @@ public class QuestionInterface {
     private JPanel imagePanel;
 
     private JFrame questionInterfaceFrame = new JFrame("Project DataScience - Groep 4 - Ask Question");
+    private QuestionContentBuilder questionContentBuilder = new QuestionContentBuilder();
     private Answer answer;
 
     /**
@@ -60,7 +63,7 @@ public class QuestionInterface {
                 createPieChart(xData, yData);
                 break;
             case "IMAGE":
-                AddImage();
+//                AddImage();
                 break;
             default:
         }
@@ -133,14 +136,14 @@ public class QuestionInterface {
         imagePanel.add(chartPanel, BorderLayout.CENTER);
         imagePanel.validate();
     }
-
-    /**
-     * Add image, path is from answer
-     */
-    private void AddImage() throws IOException {
-        BufferedImage questionImage = ImageIO.read(new File(answer.getImagePath()));
-        imageLabel.setIcon(new ImageIcon(questionImage.getScaledInstance(280, 280, Image.SCALE_FAST)));
-    }
+//
+//    /**
+//     * Add image, path is from answer
+//     */
+//    private void AddImage() throws IOException {
+//        BufferedImage questionImage = ImageIO.read(new File(answer.getImagePath()));
+//        imageLabel.setIcon(new ImageIcon(questionImage.getScaledInstance(280, 280, Image.SCALE_FAST)));
+//    }
 
     /**
      * Main function that contains all of the base UI settings
@@ -151,9 +154,14 @@ public class QuestionInterface {
         questionInterfaceFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         questionInterfaceFrame.setVisible(true);
 
-        //Temporary debug stuff
-        answer_content.setText(answer.getContent());
+        answer_content.setText(answer.getDescription() + System.lineSeparator() + System.lineSeparator() + buildAnswerContent());
         pageTitle.setText(answer.getTitle());
+    }
+
+    private String buildAnswerContent() {
+        String finalContent = questionContentBuilder.buildAnswer(answer);
+        System.out.println("Final content string: " + finalContent);
+        return finalContent;
     }
 
     /**

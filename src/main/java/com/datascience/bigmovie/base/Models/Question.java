@@ -1,37 +1,29 @@
-package com.datascience.bigmovie.base.Models;
+package com.datascience.bigmovie.base.models;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science
  */
 public class Question {
 
+    private Integer id;
     private String title;
+    private String description;
     private String query;
     private String type;
-    private String imagePath;
 
 
     /**
+     * @param id = Unique id for question
      * @param title = Long name of question
      * @param query = SQL query
      * @param type = Type of question, can be: "R", "VISUAL" or "REGULAR"
-     * @param imagePath = Path to optional image or different visualisation type
      */
-    public Question(String title, String query, String type, String imagePath) {
+    public Question(Integer id, String title, String description, String query, String type) {
+        this.id = id;
         this.title = title;
+        this.description = description;
         this.query = query;
         this.type = type;
-        this.imagePath = imagePath;
-    }
-
-    /**
-     * @param title = Long name of question
-     * @param query = SQL query
-     */
-    public Question(String title, String query, String type) {
-        this.title = title;
-        this.type = type;
-        this.query = query;
     }
 
     /**
@@ -53,11 +45,12 @@ public class Question {
         return query;
     }
 
-    /**
-     * @return  imagePath = path to image
-     */
-    public String getImagePath() {
-        return imagePath;
+    public String getDescription() {
+        return description;
+    }
+
+    public Integer getId() {
+        return id;
     }
 
     /**

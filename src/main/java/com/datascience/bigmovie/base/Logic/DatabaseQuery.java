@@ -1,14 +1,20 @@
 package com.datascience.bigmovie.base.Logic;
 
-import com.datascience.bigmovie.base.Models.Answer;
-import com.datascience.bigmovie.base.Models.Question;
+import com.datascience.bigmovie.base.models.Answer;
+import com.datascience.bigmovie.base.models.Question;
 
 import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science
  */
 public class DatabaseQuery {
+
+    private String jdbcURL = "jdbc:postgresql://localhost:5432/postgres";
+    private String username = "postgres";
+    private String password = "1234";
 
     /**
      * Get the question and run the query
@@ -16,7 +22,7 @@ public class DatabaseQuery {
     public Answer askQuestion(Question question) {
         try {
             return runQuery(question);
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
         return null;
@@ -24,10 +30,26 @@ public class DatabaseQuery {
 
     /**
      * Run the query
-     * TODO: implement something to run query here
      */
-    private Answer runQuery(Question question) throws IOException{
+    private Answer runQuery(Question question) throws IOException, SQLException {
         System.out.println("Running Query on database: " + question.getQuery());
-        return new Answer(question.getTitle(), "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut volutpat nulla enim, non ornare nunc faucibus nec. Suspendisse ut elit et nisi molestie efficitur. Donec sollicitudin ultricies nisl, ultricies interdum ex lacinia in.", question.getType(),  question.getImagePath());
+        Connection connection = DriverManager.getConnection(jdbcURL, username, password);
+        connection.setAutoCommit(false);
+        Statement statement = connection.createStatement();
+        ResultSet rs = statement.executeQuery(question.getQuery());
+
+        // Temp array list to store query results
+        ArrayList<String[]> results = new ArrayList<>();
+
+        int columnCount = rs.getMetaData().getColumnCount();
+        while (rs.next()) {
+            String[] row = new String[columnCount];
+            for (int i = 0; i < columnCount; i++) {
+                row[i] = rs.getString(i + 1);
+                System.out.println(row[i]);
+            }
+            results.add(row);
+        }
+        return new Answer(question.getId(), question.getTitle(), question.getDescription(), question.getType(), results);
     }
 }

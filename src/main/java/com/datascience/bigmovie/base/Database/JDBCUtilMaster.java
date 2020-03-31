@@ -13,14 +13,13 @@ class JDBCUtilMaster
 {
     //enter database connection settings here
 
-    String jdbcURL = "jdbc:postgresql://localhost:5432/movieDB";
+    String jdbcURL = "jdbc:postgresql://localhost:5432/postgres";
     String username = "postgres";
-    String password = "zelfietsinvullen";
+    String password = "1234";
 
     int batchSize = 20;
 
     void DisableFKChecks(Connection connection,String table) throws SQLException {
-
         //foreign key checks uitzetten
         Statement stmt = connection.createStatement();
         stmt.execute("ALTER TABLE "+table+" DISABLE TRIGGER ALL;");

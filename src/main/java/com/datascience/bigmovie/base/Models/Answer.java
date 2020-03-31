@@ -1,44 +1,42 @@
-package com.datascience.bigmovie.base.Models;
+package com.datascience.bigmovie.base.models;
+
+import java.util.ArrayList;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science
  */
 public class Answer {
 
+    private Integer id;
     private String title;
-    private String content;
+    private String description;
     private String type;
-    private String imagePath;
+    private ArrayList<String[]> results;
 
 
     /**
+     * @param id = id of question
      * @param title = Long name of question
-     * @param content = answer of question content
+     * @param description = description of question
      * @param type = type of question
-     * @param imagePath = Path to optional image or different visualisation type
+     * @param results = Path to optional image or different visualisation type
      */
-    public Answer(String title, String content, String type, String imagePath) {
+    public Answer(Integer id, String title, String description, String type, ArrayList<String[]> results) {
+        this.id = id;
         this.title = title;
-        this.content = content;
+        this.description = description;
         this.type = type;
-        this.imagePath = imagePath;
-    }
-
-    /**
-     * @param title = Long name of question
-     * @param type = type of question
-     * @param content = answer of question content
-     */
-    public Answer(String title, String type, String content) {
-        this.title = title;
-        this.type = type;
-        this.content = content;
+        this.results = results;
     }
 
     /**
      * @return type = type of question
      */
     public String getType() { return type; }
+
+    public ArrayList<String[]> getResults() {
+        return results;
+    }
 
     /**
      * @return  title = Long title of question
@@ -50,15 +48,11 @@ public class Answer {
     /**
      * @return  getUniqueId = unique id of question
      */
-    public String getContent() {
-        return content;
+    public String getDescription() {
+        return description;
     }
 
-    /**
-     * @return  imagePath = path to image
-     */
-    public String getImagePath() {
-        return imagePath;
+    public Integer getId() {
+        return id;
     }
-
 }

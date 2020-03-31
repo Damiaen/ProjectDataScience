@@ -1,6 +1,6 @@
 package com.datascience.bigmovie.base.Logic;
 
-import com.datascience.bigmovie.base.Models.Column;
+import com.datascience.bigmovie.base.models.Column;
 
 import java.io.*;
 import java.net.URL;
