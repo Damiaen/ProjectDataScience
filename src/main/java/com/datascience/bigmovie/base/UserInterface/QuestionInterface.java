@@ -11,8 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
@@ -48,13 +46,10 @@ public class QuestionInterface {
 
     /**
      * Check if we need to create an graph or not, else show default question mark
-     * TODO: XY_CHART and CATEGORY_CHART
+     * TODO: XY_CHART
      */
     private void createAnswerElements() throws IOException {
         switch (answer.getType()) {
-            case "XY_CHART":
-                createXYChart();
-                break;
             case "CATEGORY_CHART":
                 createCategoryChart();
                 break;
@@ -62,7 +57,7 @@ public class QuestionInterface {
                 createPieChart();
                 break;
             default:
-                addImage();
+                imagePanel.setVisible(false);
         }
     }
 
@@ -72,7 +67,7 @@ public class QuestionInterface {
                 new CategoryChartBuilder()
                         .width(800)
                         .height(600)
-                        .title("Staafdiagram")
+                        .title("")
                         .xAxisTitle("X - waarde")
                         .yAxisTitle("Y - waarde")
                         .build();
@@ -81,7 +76,7 @@ public class QuestionInterface {
         chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
         chart.getStyler().setHasAnnotations(true);
         chart.getStyler().setPlotGridLinesVisible(false);
-        chart.getStyler().setXAxisTickMarkSpacingHint(200);
+        chart.getStyler().setXAxisLabelRotation(90);
 
         // Get cleaned params from data, each questions has own function to return clean data
         ArrayList<String[]> pieChartParameters = questionGraphBuilder.buildGraph(answer);
@@ -100,21 +95,8 @@ public class QuestionInterface {
         }
 
         // Series
-        chart.addSeries("data", firstRow, secondRow);
+        chart.addSeries("Aantal", firstRow, secondRow);
 
-        // Add the element to the imagePanel
-        addToPanel(new XChartPanel<>(chart));
-    }
-
-    /**
-     * create an XY Chart based on xData and yData
-     */
-    private void createXYChart() {
-        // Below is some temporary test data, this should be replaced later on
-        double[] xData = new double[]{0.0, 1.0, 2.0};
-        double[] yData = new double[]{2.0, 1.0, 0.0};
-        // Create XYChart
-        XYChart chart = QuickChart.getChart("Sample Chart", "X", "Y", "y(x)", xData, yData);
         // Add the element to the imagePanel
         addToPanel(new XChartPanel<>(chart));
     }
@@ -144,20 +126,22 @@ public class QuestionInterface {
     }
 
     /**
-     * Add element to imagePanel
+     * Add element to imagePanel, update view with styling stuff
      */
     private void addToPanel(JPanel chartPanel) {
+        content_panel.setMinimumSize(new Dimension(500, -1));
+        imagePanel.setVisible(true);
         imagePanel.setLayout(new java.awt.BorderLayout());
         imagePanel.add(chartPanel, BorderLayout.CENTER);
         imagePanel.validate();
     }
 
     /**
-     * Add image, this is the default option
+     * Add image to the question interface
      */
     private void addImage() throws IOException {
-        BufferedImage questionImage = ImageIO.read(new File("src/main/resources/images/questionmark.jpg"));
-        imageLabel.setIcon(new ImageIcon(questionImage.getScaledInstance(280, 280, Image.SCALE_FAST)));
+        BufferedImage questionImage = ImageIO.read(new File("src/main/resources/images/question.png"));
+        imageLabel.setIcon(new ImageIcon(questionImage.getScaledInstance(240, 380, Image.SCALE_SMOOTH)));
     }
 
     /**
@@ -165,25 +149,22 @@ public class QuestionInterface {
      */
     private void createInterfaceElements() throws IOException {
         questionInterfaceFrame.setContentPane(rootPanel);
-        questionInterfaceFrame.setSize(940, 480);
+        questionInterfaceFrame.setSize(1200, 640);
         questionInterfaceFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         questionInterfaceFrame.setVisible(true);
 
         answer_content.setText(answer.getDescription() + System.lineSeparator() + System.lineSeparator() + buildAnswerContent());
         pageTitle.setText(answer.getTitle());
+
+        System.out.println(titlePanel.getWidth());
     }
 
+    /**
+     * Build the answer content, content is based on unique id of question/answer
+     */
     private String buildAnswerContent() {
         String finalContent = questionContentBuilder.buildAnswer(answer);
         System.out.println("Final content string: " + finalContent);
         return finalContent;
-    }
-
-    /**
-     * Return to the main UI view
-     */
-    private void exitPage() {
-        questionInterfaceFrame.setVisible(false);
-        questionInterfaceFrame.dispose();
     }
 }

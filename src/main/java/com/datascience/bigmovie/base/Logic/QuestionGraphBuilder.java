@@ -26,25 +26,19 @@ public class QuestionGraphBuilder {
 
     /**
      * Build the correct chart for the given question, this is based on question id
-     * TODO: Dont base this on question id and build them based on given data
+     * Some of the data doesnt need to be cleaned, so we can just skip that step and return the base data
      */
     private ArrayList<String[]> getGraph(Answer answer) throws IOException {
         System.out.println("Building answer for question id: " + answer.getId());
         switch (answer.getId()) {
+            case 1:
             case 2:
-                return generatePieChartQuestion2(answer);
+                return answer.getResults();
             case 3:
                 return generateCategoryChartQuestion3(answer);
             default:
                 return null;
         }
-    }
-
-    /**
-     * Answer 2 data is already clean, return it all
-     */
-    private ArrayList<String[]> generatePieChartQuestion2(Answer answer) {
-        return answer.getResults();
     }
 
     /**

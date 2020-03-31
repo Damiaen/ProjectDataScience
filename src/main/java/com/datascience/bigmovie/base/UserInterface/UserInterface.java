@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -78,13 +77,16 @@ public class UserInterface extends JFrame{
      * Set all the questions related stuff here
      */
     private void getQuestions() {
-        this.questions.add(new Question(1, "1. Welke actrices en acteurs spelen in meer dan 15 films met een ranking vanaf 8 sterren?", "Test description here", "SELECT * FROM person WHERE person.id = 'nm0000001'", "REGULAR"));
-        this.questions.add(new Question(2, "2. Geef een top 15 lijst van films met een budget van onder de 30 miljoen met een ranking vanaf 8,5 sterren?", "Test description here", "SELECT DISTINCT titlebasics.genres as genres,count(genres) as genres_count FROM titlebasics INNER JOIN titleepisode ON titleepisode.titleid=titlebasics.id where titleepisode.seasonnumber > '5' AND genres != 'NULL' group by genres order by genres_count DESC LIMIT 10;", "CATEGORY_CHART"));
-        this.questions.add(new Question(3, "3. Geef een top 25 lijst van films met de meeste uitgaven?", "(Betekent een hoger budget per se een betere/succesvollere film?)", "SELECT DISTINCT titlebasics.genres as genres,count(genres) as genres_count FROM titlebasics INNER JOIN titleepisode ON titleepisode.titleid=titlebasics.id where titleepisode.seasonnumber > '5' AND genres != 'NULL' group by genres order by genres_count DESC LIMIT 10;", "PIE_CHART"));
-        this.questions.add(new Question(4, "4. Geef een overzicht waarbij de schrijver ook de regisseur was bij het maken een film? Neem hier een rating boven de 9.", "Test description here", "SELECT * FROM person WHERE person.id = 'nm0000001'", "REGULAR"));
-        this.questions.add(new Question(5, "5. Welke genre wordt het meest bekeken als je alle films pakt vanaf 8,8 sterren?", "Test description here", "SELECT * FROM person WHERE person.id = 'nm0000001'", "REGULAR"));
-        this.questions.add(new Question(6, "6. Geef een top 15 lijst met films waar de draai tijd het langs heeft geduurd?(geeft dit uitzonderlijk verschil)", "Test description here", "SELECT * FROM person WHERE person.id = 'nm0000001'", "REGULAR"));
-        this.questions.add(new Question(7, "7. Geef top 15 lijst met films met een ranking vanaf 9,5sterren maar hebben het laagste productiebudget?", "Test description here", "SELECT * FROM person WHERE person.id = 'nm0000001'", "REGULAR"));
+        this.questions.add(new Question(1, "1. Welke top 10 genres, op basis van aantal keren voorgekomen, behoren tot series die meer dan 5 seizoenen hebben uitgebracht?", "De uitkomst is gebaseerd op een max van 10 genres met een minimaal van 5 seizoenen.", "SELECT DISTINCT titlebasics.genres as genres,count(genres) as genres_count FROM titlebasics INNER JOIN titleepisode ON titleepisode.titleid=titlebasics.id where titleepisode.seasonnumber > '5' AND genres != 'NULL' group by genres order by genres_count DESC LIMIT 10;", "PIE_CHART"));
+        this.questions.add(new Question(2, "2. Welke serie heeft over de loop van al zijn seizoenen het meeste verschil in regisseurs gehad?", "In de X - waarde van de vinden we de series terug, met als Y - waarde het aantal regiseurs dat deze serie heeft gehad", "SELECT DISTINCT titlebasics.originaltitle, count (principals.personid) as count FROM titlebasics INNER JOIN principals on principals.titleid = titlebasics.id WHERE principals.category LIKE '%director%' AND titlebasics.titletype LIKE 'tvSeries' group by titlebasics.id order by count DESC LIMIT 10;", "CATEGORY_CHART"));
+        this.questions.add(new Question(3, "3. Welke regisseur heeft in zijn carrière de meest verschillende series geregisseerd?", "Zit hier een verband dat makers dit duo een goede combi vinden, misschien steeds zelfde rol.", "SELECT DISTINCT titlebasics.genres as genres,count(genres) as genres_count FROM titlebasics INNER JOIN titleepisode ON titleepisode.titleid=titlebasics.id where titleepisode.seasonnumber > '5' AND genres != 'NULL' group by genres order by genres_count DESC LIMIT 10;", "PIE_CHART"));
+        this.questions.add(new Question(4, "4. Geef actrices/acteurs die vaker dan 2 keer samen hebben gespeeld in een serie.", "Test description here", "SELECT * FROM person WHERE person.id = 'nm0000001'", "REGULAR"));
+        this.questions.add(new Question(5, "5. Welke serie met minimaal 3 seizoenen heeft de meeste acteurs/actrices?", "Test description here", "SELECT * FROM person WHERE person.id = 'nm0000001'", "REGULAR"));
+        this.questions.add(new Question(6, "6. Is er een verband tussen het aantal seizoenen en de rating die is gegeven voor een serie?", "Maak dit in R.", "SELECT * FROM person WHERE person.id = 'nm0000001'", "R"));
+        this.questions.add(new Question(7, "7. Is er een relatie tussen de series die meerdere regisseurs hebben gehad en de gemiddelde rating van een aflevering?", "(ging het gemiddelde naar beneden toen er een andere regisseur kwam.) Maak dit in R.", "SELECT * FROM person WHERE person.id = 'nm0000001'", "R"));
+        this.questions.add(new Question(8, "8. Is er een verband tussen de hoeveelheid seizoenen die een serie heeft en de gemiddelde rating?", "Hebben deze seizoenen dan ook een hogere rating? Maak dit met R.", "SELECT * FROM person WHERE person.id = 'nm0000001'", "R"));
+        this.questions.add(new Question(9, "9. Welke acteur heeft het vaakst in meerdere series gespeeld betreft verschillende genres?", "(ging het gemiddelde naar beneden toen er een andere regisseur kwam.) Maak dit in R.", "SELECT * FROM person WHERE person.id = 'nm0000001'", "REGULAR"));
+        this.questions.add(new Question(10, "10. Wat is de gemiddelde man/vrouw verhouding van de actrices/acteurs van series uit 1975-1980 en 2015-2020?", "Mogelijk interessant om te zien of er vroeger meer spelers waren van het zelfde geslacht in een serie vergelijken met nu", "SELECT * FROM person WHERE person.id = 'nm0000001'", "REGULAR"));
     }
 
     /**
@@ -115,41 +117,54 @@ public class UserInterface extends JFrame{
         userInterfaceFrame.dispose();
     }
 
+    /**
+     * Get question by index
+     */
     private Question getQuestion(Integer index) {
         return Objects.requireNonNull(questions.get(index));
     }
 
     /**
+     * Toggle the enabled value of the buttons on and off
+     */
+    private void toggleButtons(Boolean toggle) {
+        button_parse.setEnabled(toggle);
+        button_build.setEnabled(toggle);
+        ask_question.setEnabled(toggle);
+        questions_list.setEnabled(toggle);
+    }
+
+    /**
+     * Toggle the loader enabled value of the buttons on and off
+     */
+    private void toggleLoader(Boolean toggle) {
+        questionProgressBar.setVisible(toggle);
+        questionProgressBar.setIndeterminate(toggle);
+    }
+
+    /**
      * Dispose of the main UI and open the QuestionBuilder UI
-     * TODO: Implement SQL Query Builder here
-     * TODO: Cleanup disabling of buttons
      */
     private void runQuestionBuilder() throws IOException {
-        button_parse.setEnabled(false);
-        button_build.setEnabled(false);
-        ask_question.setEnabled(false);
-        questions_list.setEnabled(false);
-        questionProgressBar.setVisible(true);
-        questionProgressBar.setIndeterminate(true);
+        // Turn buttons off and start loader
+        toggleButtons(false);
+        toggleLoader(true);
 
         final Answer[] questionAnswer = new Answer[1];
 
         new SwingWorker<Void, String>() {
             @Override
             protected Void doInBackground() throws Exception {
-                // Get question from questions list and run the query
+                // Get question from questions list and run the query, since we are in an inner class we do this
                 questionAnswer[0] = databaseQuery.askQuestion(getQuestion(questions_list.getSelectedIndex()));
                 return null;
             }
 
             @Override
             protected void done() {
-                questionProgressBar.setVisible(false);
-                questionProgressBar.setIndeterminate(false);
-                button_parse.setEnabled(true);
-                button_build.setEnabled(true);
-                ask_question.setEnabled(true);
-                questions_list.setEnabled(true);
+                // Re-enable buttons off and turn the loader off
+                toggleButtons(true);
+                toggleLoader(false);
 
                 try {
                     new QuestionInterface(questionAnswer[0]);
