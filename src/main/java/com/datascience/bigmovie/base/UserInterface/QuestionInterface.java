@@ -1,6 +1,7 @@
 package com.datascience.bigmovie.base.UserInterface;
 
 import com.datascience.bigmovie.base.Logic.QuestionContentBuilder;
+import com.datascience.bigmovie.base.Logic.QuestionGraphBuilder;
 import com.datascience.bigmovie.base.models.Answer;
 
 import javax.imageio.ImageIO;
@@ -11,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
@@ -29,6 +31,7 @@ public class QuestionInterface {
 
     private JFrame questionInterfaceFrame = new JFrame("Project DataScience - Groep 4 - Ask Question");
     private QuestionContentBuilder questionContentBuilder = new QuestionContentBuilder();
+    private QuestionGraphBuilder questionGraphBuilder = new QuestionGraphBuilder();
     private Answer answer;
 
     /**
@@ -44,28 +47,22 @@ public class QuestionInterface {
     }
 
     /**
-     * Create and display answer elements based on type value
-     * TODO: Replace temp data with data form question
+     * Check if we need to create an graph or not, else show default question mark
+     * TODO: XY_CHART and CATEGORY_CHART
      */
     private void createAnswerElements() throws IOException {
-        // Below is some temporary test data, this should be replaced later on
-        double[] xData = new double[]{0.0, 1.0, 2.0};
-        double[] yData = new double[]{2.0, 1.0, 0.0};
-
         switch (answer.getType()) {
             case "XY_CHART":
-                createXYChart(xData, yData);
+                createXYChart();
                 break;
             case "CATEGORY_CHART":
                 createCategoryChart();
                 break;
             case "PIE_CHART":
-                createPieChart(xData, yData);
-                break;
-            case "IMAGE":
-//                AddImage();
+                createPieChart();
                 break;
             default:
+                addImage();
         }
     }
 
@@ -75,18 +72,35 @@ public class QuestionInterface {
                 new CategoryChartBuilder()
                         .width(800)
                         .height(600)
-                        .title("Score Histogram")
-                        .xAxisTitle("Score")
-                        .yAxisTitle("Number")
+                        .title("Staafdiagram")
+                        .xAxisTitle("X - waarde")
+                        .yAxisTitle("Y - waarde")
                         .build();
 
         // Customize Chart
         chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideNW);
         chart.getStyler().setHasAnnotations(true);
         chart.getStyler().setPlotGridLinesVisible(false);
+        chart.getStyler().setXAxisTickMarkSpacingHint(200);
+
+        // Get cleaned params from data, each questions has own function to return clean data
+        ArrayList<String[]> pieChartParameters = questionGraphBuilder.buildGraph(answer);
+
+        // Split data into 2, firstRow is X, secondRow is Y
+        ArrayList<String> firstRow = new ArrayList<>();
+        ArrayList<Integer> secondRow = new ArrayList<>();
+
+        // Check if not empty, else do nothing
+        if (!pieChartParameters.isEmpty()) {
+            // Get ArrayList with an string array with 2 values (field name and value)
+            for (String[] results : pieChartParameters) {
+                firstRow.add(results[0]);
+                secondRow.add(Integer.parseInt(results[1]));
+            }
+        }
 
         // Series
-        chart.addSeries("test 1", Arrays.asList(0, 1, 2, 3, 4), Arrays.asList(4, 5, 9, 6, 5));
+        chart.addSeries("data", firstRow, secondRow);
 
         // Add the element to the imagePanel
         addToPanel(new XChartPanel<>(chart));
@@ -94,11 +108,11 @@ public class QuestionInterface {
 
     /**
      * create an XY Chart based on xData and yData
-     *
-     * @param xData = data for x axis
-     * @param yData = data for y axis
      */
-    private void createXYChart(double[] xData, double[] yData) {
+    private void createXYChart() {
+        // Below is some temporary test data, this should be replaced later on
+        double[] xData = new double[]{0.0, 1.0, 2.0};
+        double[] yData = new double[]{2.0, 1.0, 0.0};
         // Create XYChart
         XYChart chart = QuickChart.getChart("Sample Chart", "X", "Y", "y(x)", xData, yData);
         // Add the element to the imagePanel
@@ -106,26 +120,27 @@ public class QuestionInterface {
     }
 
     /**
-     * create an Pie Chart based on data from the answer
-     *
-     * @param xData = data for x axis
-     * @param yData = data for y axis
+     * create an Pie Chart based on data from the answer, we give the answers to questionGraphBuilder to generate the
+     * correct data for the pie chart
      */
-    private void createPieChart(double[] xData, double[] yData) {
-        PieChart chart = new PieChartBuilder().width(800).height(600).title("Pie Chart with 4 Slices").build();
+    private void createPieChart() {
+        // Generate new PieChart
+        PieChart chart = new PieChartBuilder().width(800).height(600).title("Pie Chart").build();
 
-        // Customize Chart
+        // Customize options here
         chart.getStyler().setCircular(false);
 
-        // Series
-        // TODO: for loop through list of items from query
-        chart.addSeries("Pennies", 100);
-        chart.addSeries("Nickels", 100);
-        chart.addSeries("Dimes", 100);
-        chart.addSeries("Quarters", 100);
+        // Get cleaned params for PieChart, each questions has own function
+        ArrayList<String[]> pieChartParameters = questionGraphBuilder.buildGraph(answer);
 
-        // Add the element to the imagePanel
-        addToPanel(new XChartPanel<>(chart));
+        // Check if not empty, else do nothing
+        if (!pieChartParameters.isEmpty()) {
+            // Get ArrayList with an string array with 2 values (field name and value)
+            for (String[] results : pieChartParameters) {
+                chart.addSeries(results[0], Integer.parseInt(results[1]));
+            }
+            addToPanel(new XChartPanel<>(chart));
+        }
     }
 
     /**
@@ -136,14 +151,14 @@ public class QuestionInterface {
         imagePanel.add(chartPanel, BorderLayout.CENTER);
         imagePanel.validate();
     }
-//
-//    /**
-//     * Add image, path is from answer
-//     */
-//    private void AddImage() throws IOException {
-//        BufferedImage questionImage = ImageIO.read(new File(answer.getImagePath()));
-//        imageLabel.setIcon(new ImageIcon(questionImage.getScaledInstance(280, 280, Image.SCALE_FAST)));
-//    }
+
+    /**
+     * Add image, this is the default option
+     */
+    private void addImage() throws IOException {
+        BufferedImage questionImage = ImageIO.read(new File("src/main/resources/images/questionmark.jpg"));
+        imageLabel.setIcon(new ImageIcon(questionImage.getScaledInstance(280, 280, Image.SCALE_FAST)));
+    }
 
     /**
      * Main function that contains all of the base UI settings

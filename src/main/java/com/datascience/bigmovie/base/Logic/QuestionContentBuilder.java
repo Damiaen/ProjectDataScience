@@ -33,6 +33,8 @@ public class QuestionContentBuilder {
                 return question1(results);
             case 2:
                 return question2(results);
+            case 3:
+                return question3(results);
             default:
                 return "Error met het uitvoeren van de query/ophalen van de data. Dit is de default debugg value";
         }
@@ -44,6 +46,11 @@ public class QuestionContentBuilder {
     }
 
     private String question2(ArrayList<String[]> results) {
+        String template = "Het antwoordt op de vraag is: %s %s %s %s";
+        return String.format(template, results.get(0)[0], results.get(0)[1], results.get(1)[0], results.get(1)[1]);
+    }
+
+    private String question3(ArrayList<String[]> results) {
         String template = "Het antwoordt op de vraag is: %s %s %s %s";
         return String.format(template, results.get(0)[0], results.get(0)[1], results.get(1)[0], results.get(1)[1]);
     }

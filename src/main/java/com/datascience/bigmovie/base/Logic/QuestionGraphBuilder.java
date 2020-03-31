@@ -7,15 +7,17 @@ import java.util.ArrayList;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science
+ *
+ * Class: We clean the question data based on question id, so the graphs will work
  */
 public class QuestionGraphBuilder {
 
     /**
      * Get the question and run the query
      */
-    public String buildGraph(Answer answer) {
+    public ArrayList<String[]> buildGraph(Answer answer) {
         try {
-            return checkGraphType(answer);
+            return getGraph(answer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -23,26 +25,33 @@ public class QuestionGraphBuilder {
     }
 
     /**
-     * Build the correct content for the charts so they will work, based on questions id
+     * Build the correct chart for the given question, this is based on question id
+     * TODO: Dont base this on question id and build them based on given data
      */
-    private String checkGraphType(Answer answer) throws IOException {
+    private ArrayList<String[]> getGraph(Answer answer) throws IOException {
         System.out.println("Building answer for question id: " + answer.getId());
-        ArrayList<String[]> results = answer.getResults();
-        switch (answer.getType()) {
-            case "PIE_CHART":
-                return generatePieChart(answer);
-            case "REGULAR":
-                return generateRegular(answer);
+        switch (answer.getId()) {
+            case 2:
+                return generatePieChartQuestion2(answer);
+            case 3:
+                return generateCategoryChartQuestion3(answer);
             default:
-                return "Error met het uitvoeren van de query/ophalen van de data. Dit is de default debugg value";
+                return null;
         }
     }
 
-    private String generatePieChart(Answer answer) {
-        return "test";
+    /**
+     * Answer 2 data is already clean, return it all
+     */
+    private ArrayList<String[]> generatePieChartQuestion2(Answer answer) {
+        return answer.getResults();
     }
 
-    private String generateRegular(Answer answer) {
-        return "jdwajdaowij";
+    /**
+     * Answer 3 data is already clean, return it all
+     */
+    private ArrayList<String[]> generateCategoryChartQuestion3(Answer answer) {
+        return answer.getResults();
     }
+
 }
