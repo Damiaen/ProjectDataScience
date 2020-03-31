@@ -82,13 +82,19 @@ public class QuestionContentBuilder {
     }
 
     private String question4(ArrayList<String[]> results) {
-        String template = "Het antwoordt op de vraag is: %s %s";
-        return String.format(template, results.get(0)[0], results.get(0)[1]);
+        stringBuilder.append("Als we kijken naar de top 5 genres waar de meeste acteurs/actrices in hebben gespeeld komt de volgende data naar boven: \n \n");
+        for (String[] result : results) {
+            stringBuilder.append("Genre: ").append(result[0]).append(", heeft totaal: ").append(result[1]).append(" acteurs/actrices gehad. \n");
+        }
+        return stringBuilder.toString();
     }
 
     private String question5(ArrayList<String[]> results) {
-        String template = "Het antwoordt op de vraag is: %s %s";
-        return String.format(template, results.get(0)[0], results.get(0)[1]);
+        stringBuilder.append("We hebben eerst gekeken naar series met minimaal 20 seizoenen, daarna welke er dan de meeste actors hadden. Hier liepen we wel tegen een probleem met de data aan, want er staan max 10 records in de database bijbehorende aan een serie. Dus de onderstaande info is gebaseerd op de data die wij van imdb hebben verkregen. \n \n");
+        for (String[] result : results) {
+            stringBuilder.append(result[0]).append(", heeft totaal: ").append(result[1]).append(" actors/actresses. Vanaf season 20 heeft deze serie ").append(result[2]).append(" afleveringen").append(".\n");
+        }
+        return stringBuilder.toString();
     }
 
     private String question6(ArrayList<String[]> results) {
@@ -97,18 +103,27 @@ public class QuestionContentBuilder {
     }
 
     private String question7(ArrayList<String[]> results) {
-        String template = "Het antwoordt op de vraag is: %s %s";
-        return String.format(template, results.get(0)[0], results.get(0)[1]);
+        stringBuilder.append("Als wij kijken naar de top 10 series met de meeste seizoenen en hun gemiddelde rating, komen de volgende series + rating naar boven: \n \n");
+        for (String[] result : results) {
+            stringBuilder.append(result[0]).append(", episodes: ").append(result[1]).append(". Met een rating van:").append(result[2]).append(".\n");
+        }
+        return stringBuilder.toString();
     }
 
     private String question8(ArrayList<String[]> results) {
-        String template = "Het antwoordt op de vraag is: %s %s";
-        return String.format(template, results.get(0)[0], results.get(0)[1]);
+        stringBuilder.append("Als wij kijken naar de top 10 series met de meeste seizoenen en hun gemiddelde rating, komen de volgende series + rating naar boven: \n \n");
+        for (String[] result : results) {
+            stringBuilder.append(result[0]).append(", episodes: ").append(result[1]).append(". Met een rating van:").append(result[2]).append(".\n");
+        }
+        return stringBuilder.toString();
     }
 
     private String question9(ArrayList<String[]> results) {
-        String template = "Het antwoordt op de vraag is: %s %s";
-        return String.format(template, results.get(0)[0], results.get(0)[1]);
+        stringBuilder.append("Als we ophalen welke 3 acteurs in de meest verschillende series hebben gespeeld komt er het volgende naar boven: \n \n");
+        for (String[] result : results) {
+            stringBuilder.append("Acteur: ").append(result[0]).append(" heet in totaal in '").append(result[1]).append("' series gespeeld").append(".\n");
+        }
+        return stringBuilder.toString();
     }
 
     private String question10(ArrayList<String[]> results) {

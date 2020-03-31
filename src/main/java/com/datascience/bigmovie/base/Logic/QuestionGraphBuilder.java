@@ -30,22 +30,29 @@ public class QuestionGraphBuilder {
      */
     private ArrayList<String[]> getGraph(Answer answer) throws IOException {
         System.out.println("Building answer for question id: " + answer.getId());
-        switch (answer.getId()) {
-            case 1:
-            case 2:
-                return answer.getResults();
-            case 3:
-                return generateCategoryChartQuestion3(answer);
+        switch (answer.getType()) {
+            case "PIE_CHART":
+                return generatePieChartContent(answer);
+            case "CATEGORY_CHART":
+                return generateCategoryChartContent(answer);
             default:
                 return null;
         }
     }
 
     /**
-     * Answer 3 data is already clean, return it all
+     * Currently all data is clean already, so this is more for future proofing
      */
-    private ArrayList<String[]> generateCategoryChartQuestion3(Answer answer) {
+    private ArrayList<String[]> generatePieChartContent(Answer answer) {
         return answer.getResults();
     }
+
+    /**
+     * Currently all data is clean already, so this is more for future proofing
+     */
+    private ArrayList<String[]> generateCategoryChartContent(Answer answer) {
+        return answer.getResults();
+    }
+
 
 }

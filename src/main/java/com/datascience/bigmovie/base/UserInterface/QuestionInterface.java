@@ -67,7 +67,7 @@ public class QuestionInterface {
                 new CategoryChartBuilder()
                         .width(800)
                         .height(600)
-                        .title("")
+                        .title(" ")
                         .xAxisTitle("X - waarde")
                         .yAxisTitle("Y - waarde")
                         .build();
@@ -107,7 +107,7 @@ public class QuestionInterface {
      */
     private void createPieChart() {
         // Generate new PieChart
-        PieChart chart = new PieChartBuilder().width(800).height(600).title("Pie Chart").build();
+        PieChart chart = new PieChartBuilder().width(800).height(600).title(" ").build();
 
         // Customize options here
         chart.getStyler().setCircular(false);
