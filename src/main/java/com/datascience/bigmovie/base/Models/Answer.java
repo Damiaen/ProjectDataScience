@@ -11,8 +11,30 @@ public class Answer {
     private String title;
     private String description;
     private String type;
+    private String imageName;
+    private String rCodePath;
     private ArrayList<String[]> results;
 
+
+    /**
+     * @param id          = id of question
+     * @param title       = Long name of question
+     * @param description = description of question
+     * @param type        = type of question
+     * @param imageName   = name of image
+     */
+    public Answer(Integer id, String title, String description, String type, String imageName, String rCodePath) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.type = type;
+        this.imageName = imageName;
+        this.rCodePath = rCodePath;
+    }
+
+    public String getrCodePath() {
+        return rCodePath;
+    }
 
     /**
      * @param id = id of question
@@ -28,6 +50,9 @@ public class Answer {
         this.type = type;
         this.results = results;
     }
+
+
+    public String getImageName() { return imageName; }
 
     /**
      * @return type = type of question
