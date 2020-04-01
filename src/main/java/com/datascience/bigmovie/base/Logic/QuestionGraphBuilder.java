@@ -42,6 +42,7 @@ public class QuestionGraphBuilder {
 
     /**
      * Currently all data is clean already, so this is more for future proofing
+     * TODO: if needed change if statement to switch
      */
     private ArrayList<String[]> generatePieChartContent(Answer answer) {
         return answer.getResults();
@@ -53,6 +54,5 @@ public class QuestionGraphBuilder {
     private ArrayList<String[]> generateCategoryChartContent(Answer answer) {
         return answer.getResults();
     }
-
 
 }

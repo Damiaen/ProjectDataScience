@@ -4,6 +4,7 @@ import com.datascience.bigmovie.base.models.Answer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science
@@ -127,8 +128,11 @@ public class QuestionContentBuilder {
     }
 
     private String question10(ArrayList<String[]> results) {
-        String template = "Het antwoordt op de vraag is: %s %s";
-        return String.format(template, results.get(0)[0], results.get(0)[1]);
+        stringBuilder.append("Als we kijken naar de verhouding man/vrouw onder 1975 en 1980 en dan naar 2015 en 2020 komt het volgende naar boven:: \n \n");
+        stringBuilder.append("In de jaren 1975 tot 1980 speelden er '").append(results.get(0)[0]).append("' acteurs en '").append(results.get(1)[0]).append("' actrices in films en series").append(".\n");
+        stringBuilder.append("In de jaren 2015 tot 2020 speelden er '").append(results.get(2)[0]).append("' acteurs en '").append(results.get(3)[0]).append("' actrices in films en series").append(".\n\n");
+        stringBuilder.append("Door even te rekenen kunnen we tot de conclusie komen dat in de jaren 1975-1980, 68.93% de rollen door een man werden gespeeld en van 2015-2020, 42.97% van de rollen door een man werden gespeeld.'").append(".\n");
+        return stringBuilder.toString();
     }
 
 }

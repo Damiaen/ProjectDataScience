@@ -6,6 +6,7 @@ import com.datascience.bigmovie.base.models.Question;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science
@@ -32,23 +33,25 @@ public class DatabaseQuery {
      * Run the query
      */
     private Answer runQuery(Question question) throws IOException, SQLException {
-        System.out.println("Running Query on database: " + question.getQuery());
-        Connection connection = DriverManager.getConnection(jdbcURL, username, password);
-        connection.setAutoCommit(false);
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery(question.getQuery());
-
-        // Temp array list to store query results
         ArrayList<String[]> results = new ArrayList<>();
+        for (String query : question.getQuery()) {
+            System.out.println("Running Query on database: " + query);
+            Connection connection = DriverManager.getConnection(jdbcURL, username, password);
+            connection.setAutoCommit(false);
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(query);
 
-        int columnCount = rs.getMetaData().getColumnCount();
-        while (rs.next()) {
-            String[] row = new String[columnCount];
-            for (int i = 0; i < columnCount; i++) {
-                row[i] = rs.getString(i + 1);
-                System.out.println(row[i]);
+            // Temp array list to store query results
+
+            int columnCount = rs.getMetaData().getColumnCount();
+            while (rs.next()) {
+                String[] row = new String[columnCount];
+                for (int i = 0; i < columnCount; i++) {
+                    row[i] = rs.getString(i + 1);
+                    System.out.println(row[i]);
+                }
+                results.add(row);
             }
-            results.add(row);
         }
         return new Answer(question.getId(), question.getTitle(), question.getDescription(), question.getType(), results);
     }

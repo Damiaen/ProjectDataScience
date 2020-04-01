@@ -8,7 +8,7 @@ public class Question {
     private Integer id;
     private String title;
     private String description;
-    private String query;
+    private String[] query;
     private String type;
 
 
@@ -18,7 +18,7 @@ public class Question {
      * @param query = SQL query
      * @param type = Type of question, can be: "R", "VISUAL" or "REGULAR"
      */
-    public Question(Integer id, String title, String description, String query, String type) {
+    public Question(Integer id, String title, String description, String[] query, String type) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -41,7 +41,7 @@ public class Question {
     /**
      * @return  query = query of question
      */
-    public String getQuery() {
+    public String[] getQuery() {
         return query;
     }
 
