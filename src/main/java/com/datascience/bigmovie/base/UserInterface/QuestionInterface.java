@@ -7,9 +7,13 @@ import com.datascience.bigmovie.base.models.Answer;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import org.knowm.xchart.*;
@@ -26,6 +30,7 @@ public class QuestionInterface {
     private JLabel imageLabel;
     private JPanel titlePanel;
     private JPanel imagePanel;
+    private JButton openExplorer;
 
     private JFrame questionInterfaceFrame = new JFrame("Project DataScience - Groep 4 - Ask Question");
     private QuestionContentBuilder questionContentBuilder = new QuestionContentBuilder();
@@ -42,6 +47,21 @@ public class QuestionInterface {
         createInterfaceElements();
         // Look at the answer itself and build the UI further based on the params
         createAnswerElements();
+
+        openExplorer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    File file = new File("src/main/resources/r_code/" + answer.getrCodePath());
+                    String path = file.getCanonicalPath();
+
+                    ProcessBuilder pb = new ProcessBuilder("explorer.exe", "/select," + path);
+                    pb.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**
@@ -54,6 +74,9 @@ public class QuestionInterface {
                 break;
             case "PIE_CHART":
                 createPieChart();
+                break;
+            case "R":
+                createR();
                 break;
             default:
                 imagePanel.setVisible(false);
@@ -136,11 +159,14 @@ public class QuestionInterface {
     }
 
     /**
-     * Add image to the question interface
+     * Add Style the page so it works with R
      */
-    private void addImage() throws IOException {
-        BufferedImage questionImage = ImageIO.read(new File("src/main/resources/images/question.png"));
-        imageLabel.setIcon(new ImageIcon(questionImage.getScaledInstance(240, 380, Image.SCALE_SMOOTH)));
+    private void createR() throws IOException {
+        BufferedImage questionImage = ImageIO.read(new File("src/main/resources/images/" + answer.getImageName()));
+        imageLabel.setVisible(true);
+        imageLabel.setIcon(new ImageIcon(questionImage.getScaledInstance(540, 360, Image.SCALE_SMOOTH)));
+        imageLabel.validate();
+        openExplorer.setVisible(true);
     }
 
     /**

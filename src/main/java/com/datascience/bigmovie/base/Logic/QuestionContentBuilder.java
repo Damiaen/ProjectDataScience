@@ -99,24 +99,15 @@ public class QuestionContentBuilder {
     }
 
     private String question6(ArrayList<String[]> results) {
-        String template = "Het antwoordt op de vraag is: %s %s";
-        return String.format(template, results.get(0)[0], results.get(0)[1]);
+        return "Het antwoordt op de vraag is: ";
     }
 
     private String question7(ArrayList<String[]> results) {
-        stringBuilder.append("Als wij kijken naar de top 10 series met de meeste seizoenen en hun gemiddelde rating, komen de volgende series + rating naar boven: \n \n");
-        for (String[] result : results) {
-            stringBuilder.append(result[0]).append(", episodes: ").append(result[1]).append(". Met een rating van:").append(result[2]).append(".\n");
-        }
-        return stringBuilder.toString();
+        return "Het antwoordt op de vraag is: ";
     }
 
     private String question8(ArrayList<String[]> results) {
-        stringBuilder.append("Als wij kijken naar de top 10 series met de meeste seizoenen en hun gemiddelde rating, komen de volgende series + rating naar boven: \n \n");
-        for (String[] result : results) {
-            stringBuilder.append(result[0]).append(", episodes: ").append(result[1]).append(". Met een rating van:").append(result[2]).append(".\n");
-        }
-        return stringBuilder.toString();
+        return "Het antwoordt op de vraag is: ";
     }
 
     private String question9(ArrayList<String[]> results) {

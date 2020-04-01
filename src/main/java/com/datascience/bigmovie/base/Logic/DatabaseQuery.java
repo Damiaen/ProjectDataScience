@@ -34,25 +34,36 @@ public class DatabaseQuery {
      */
     private Answer runQuery(Question question) throws IOException, SQLException {
         ArrayList<String[]> results = new ArrayList<>();
-        for (String query : question.getQuery()) {
-            System.out.println("Running Query on database: " + query);
-            Connection connection = DriverManager.getConnection(jdbcURL, username, password);
-            connection.setAutoCommit(false);
-            Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery(query);
 
-            // Temp array list to store query results
+        if (!checkIfR(question)) {
+            for (String query : question.getQuery()) {
+                System.out.println("Running Query on database: " + query);
+                Connection connection = DriverManager.getConnection(jdbcURL, username, password);
+                connection.setAutoCommit(false);
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(query);
 
-            int columnCount = rs.getMetaData().getColumnCount();
-            while (rs.next()) {
-                String[] row = new String[columnCount];
-                for (int i = 0; i < columnCount; i++) {
-                    row[i] = rs.getString(i + 1);
-                    System.out.println(row[i]);
+                // Temp array list to store query results
+
+                int columnCount = rs.getMetaData().getColumnCount();
+                while (rs.next()) {
+                    String[] row = new String[columnCount];
+                    for (int i = 0; i < columnCount; i++) {
+                        row[i] = rs.getString(i + 1);
+                        System.out.println(row[i]);
+                    }
+                    results.add(row);
                 }
-                results.add(row);
             }
+            return new Answer(question.getId(), question.getTitle(), question.getDescription(), question.getType(), results);
         }
-        return new Answer(question.getId(), question.getTitle(), question.getDescription(), question.getType(), results);
+        return new Answer(question.getId(), question.getTitle(), question.getDescription(), question.getType(), question.getImageName(), question.getrCodePath());
+    }
+
+    /**
+     * Check if its an R question
+     */
+    private Boolean checkIfR(Question question) {
+        return question.getType().equals("R");
     }
 }
