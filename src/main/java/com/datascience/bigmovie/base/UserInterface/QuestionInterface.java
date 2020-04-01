@@ -45,8 +45,7 @@ public class QuestionInterface {
     }
 
     /**
-     * Check if we need to create an graph or not, else show default question mark
-     * TODO: XY_CHART
+     * Check if we need to create an graph or not
      */
     private void createAnswerElements() throws IOException {
         switch (answer.getType()) {
