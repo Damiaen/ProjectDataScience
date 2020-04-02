@@ -28,7 +28,7 @@ public class QuestionContentBuilder {
     /**
      * Build the question content based on values in answer and question id
      * Since there are differences in the structure of the data we decided to generate the content based on the specific question
-     * TODO: clean this up and make it more modular
+     * TODO: If we ever implement an chatbot replace this
      */
     private String buildContent(Answer answer) throws IOException {
         ArrayList<String[]> results = answer.getResults();
@@ -91,9 +91,17 @@ public class QuestionContentBuilder {
     }
 
     private String question5(ArrayList<String[]> results) {
-        stringBuilder.append("We hebben eerst gekeken naar series met minimaal 20 seizoenen, daarna welke er dan de meeste actors hadden. Hier liepen we wel tegen een probleem met de data aan, want er staan max 10 records in de database bijbehorende aan een serie. Dus de onderstaande info is gebaseerd op de data die wij van imdb hebben verkregen. \n \n");
+        stringBuilder.append("Onder de categorie 'Comedy' staan de volgende shows in de top 3: \n \n");
         for (String[] result : results) {
-            stringBuilder.append(result[0]).append(", heeft totaal: ").append(result[1]).append(" actors/actresses. Vanaf season 20 heeft deze serie ").append(result[2]).append(" afleveringen").append(".\n");
+            if (result[0].equals("Comedy")) {
+                stringBuilder.append("De show '").append(result[1]).append("' met in totaal '").append(result[2]).append("' seizoenen.\n");
+            }
+        }
+        stringBuilder.append("\nOnder de categorie 'Drama' staan de volgende shows in de top 3: \n \n");
+        for (String[] result : results) {
+            if (result[0].equals("Drama")) {
+                stringBuilder.append("De show '").append(result[1]).append("' met in totaal '").append(result[2]).append("' seizoenen.\n");
+            }
         }
         return stringBuilder.toString();
     }
