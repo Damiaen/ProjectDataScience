@@ -99,15 +99,15 @@ public class QuestionContentBuilder {
     }
 
     private String question6(ArrayList<String[]> results) {
-        return "Het antwoordt op de vraag is: ";
+        return "Rode lijn: Projectie lineaire regressie \nHet antwoordt op de vraag is: Door naar de ratings te kijken is het duidelijk dat zelfs als een serie maar 1 seizoen heeft een hogere rating kan hebben dan series met veel seizoenen. Daarom kan de conclusie worden getrokken dat er geen verband is tussen de rating en seizoenen van een serie. \n \n";
     }
 
     private String question7(ArrayList<String[]> results) {
-        return "Het antwoordt op de vraag is: ";
+        return "Rode lijn: Projectie lineaire regressie \nHet antwoordt op de vraag is: Er is te zien dat er niet veel verschil zit tussen het aantal directors en de rating van een serie. Soms is de rating van een serie zelfs lager met meerdere directors dan de series met minder directors. Daarom kan dan ook de conclusie worden getrokken dat er geen relatie zit tussen het aantal directors en de rating van een serie. \n \n";
     }
 
     private String question8(ArrayList<String[]> results) {
-        return "Het antwoordt op de vraag is: ";
+        return "Blauwe stippen: Gegeven data \nRode Stippen: Voorspelde data \nHet antwoordt op de vraag is: Omdat de rating zo veel verschild is de voorspelling ook niet echt accuraat, er zal wel een moment zijn waarbij de voorspelling goed is maar de keren dat het verkeerd is voorspeld is vele malen meer. Daarom kan de conclusie worden getrokken dat je rating niet kan voorspellen door alleen maar te kijken naar de seizoenen. \n \n";
     }
 
     private String question9(ArrayList<String[]> results) {
