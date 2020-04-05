@@ -14,7 +14,43 @@ import java.util.StringTokenizer;
  */
 public class Parser {
 
-    private List<Column> columnsList = new ArrayList<>();
+    private static Parser instance = null;
+
+    private static List<Column> columnsList = new ArrayList<>();
+
+    /**
+     * Private Constructor prevents any other class from instantiating.
+     */
+    private Parser() {}
+
+    /**
+     * Define the new csv files here, all data files, requires dataSource, newFileName, IgnoredColumns and SplitColumns
+     * IgnoredColumns and SplitColumns are based on an integer array, given integers will be used as indexes.
+     * If no value is given for any of the integer arrays it will parse all the data.
+     */
+    public static Parser getInstance()
+    {
+        if (instance == null)  {
+            instance = new Parser();
+            // All names and info
+            columnsList.add(new Column("name.basics.tsv/data", "NameBasics", new Integer[]{5}, new Integer[]{}));
+            // Movie title also know as
+            columnsList.add(new Column("title.akas.tsv/data", "TitleAKAS", new Integer[]{}, new Integer[]{}));
+            // Movie title basics
+            columnsList.add(new Column("title.basics.tsv/data", "TitleBasics", new Integer[]{}, new Integer[]{}));
+            // Amount of seasons and episodes
+            columnsList.add(new Column("title.episode.tsv/data", "Episodes", new Integer[]{}, new Integer[]{}));
+            // Movie roles and data
+            columnsList.add(new Column("title.principals.tsv/data", "Principals", new Integer[]{4,5}, new Integer[]{}));
+            // Ratings for the movie/show
+            columnsList.add(new Column("title.ratings.tsv/data", "Ratings", new Integer[]{}, new Integer[]{}));
+            //know for movies data
+            columnsList.add(new Column("name.basics.tsv/data", "TitlesKnowFor", new Integer[]{1,2,3,4}, new Integer[]{}));
+            // Crew data
+            columnsList.add(new Column("title.crew.tsv/data", "crewData", new Integer[]{2}, new Integer[]{}));
+        }
+        return instance;
+    }
 
     /**
      * Prepare the parser by setting the raw data location and ignored columns
@@ -22,49 +58,23 @@ public class Parser {
      * Extract the zip files in separate folders.
      * Example of correct filepath: ProjectDataScience/src/main/resources/database/raw/title.ratings.tsv/data.tsv
      */
-    public void setupParser() throws IOException {
-
-        // Define the new csv files here, all data files, requires dataSource, newFileName, IgnoredColumns and SplitColumns
-        // IgnoredColumns and SplitColumns are based on an integer array, given integers will be used as indexes.
-        // If no value is given for any of the integer arrays it will parse all the data.
-
-//        // All names and info
-//        this.columnsList.add(new Column("name.basics.tsv/data", "NameBasics", new Integer[]{5}, new Integer[]{}));
-//        // Movie title also know as
-//        this.columnsList.add(new Column("title.akas.tsv/data", "TitleAKAS", new Integer[]{}, new Integer[]{}));
-//        // Movie title basics
-//        this.columnsList.add(new Column("title.basics.tsv/data", "TitleBasics", new Integer[]{}, new Integer[]{}));
-//        // Amount of seasons and episodes
-//        this.columnsList.add(new Column("title.episode.tsv/data", "Episodes", new Integer[]{}, new Integer[]{}));
-//        // Movie roles and data
-//        this.columnsList.add(new Column("title.principals.tsv/data", "Principals", new Integer[]{4,5}, new Integer[]{}));
-//        // Ratings for the movie/show
-//        this.columnsList.add(new Column("title.ratings.tsv/data", "Ratings", new Integer[]{}, new Integer[]{}));
-//        //know for movies data
-//        this.columnsList.add(new Column("name.basics.tsv/data", "TitlesKnowFor", new Integer[]{1,2,3,4}, new Integer[]{}));
-
-        this.columnsList.add(new Column("title.crew.tsv/data", "crewData", new Integer[]{2}, new Integer[]{}));
-
+    public static void runParser() throws IOException {
         try {
-            convertTSVToCSVFile(this.columnsList);
+            convertTSVToCSVFile();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
      * Since the raw data files are tsv, we only need to replace certain characters to convert them to csv files.
-     *
-     * @param columns = raw data path
-     * TODO: Meer logica toevoegen aan deze functie als de database designs en sql setup klaar is.
      */
-    private static void convertTSVToCSVFile(List<Column> columns) throws IOException {
+    private static void convertTSVToCSVFile() throws IOException {
 
         StringTokenizer tokenizer;
         String lastRowData = null;
 
-        for (Column column : columns) {
+        for (Column column : columnsList) {
             // Get raw data file from from resources folder and set new file path
             String originalFile = "src/main/resources/database/raw/" + column.getDataSource() + ".tsv";
             String newFilePath = "src/main/resources/database/csv/" + column.getNewFileName() + ".csv";
