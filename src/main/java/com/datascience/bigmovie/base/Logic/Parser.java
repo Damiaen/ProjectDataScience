@@ -171,7 +171,7 @@ public class Parser {
      * @param newCsvLine  = New csv row
      * @param lastRowData = Last written csv row
      */
-    public static boolean checkIfDuplicateRow(String newCsvLine, String lastRowData) {
+    private static boolean checkIfDuplicateRow(String newCsvLine, String lastRowData) {
         return newCsvLine.equals(lastRowData);
     }
 

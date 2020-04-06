@@ -19,7 +19,7 @@ public class DatabaseInterface {
 
     private JFrame parserInterfaceFrame = new JFrame("Project DataScience - Groep 4 - Database Builder");
 
-    public DatabaseInterface() {
+    DatabaseInterface() {
         createInterfaceElements();
 
         button_build.addActionListener(new ActionListener() {
@@ -67,7 +67,7 @@ public class DatabaseInterface {
             @Override
             protected Void doInBackground() throws Exception {
 
-                /*
+
                 Thread JDBC1 = new Thread(new JDBCUtil()::main);
                 Thread JDBC2 = new Thread(new JDBCUtil2()::main);
                 Thread JDBC3 = new Thread(new JDBCUtil3()::main);
@@ -75,6 +75,7 @@ public class DatabaseInterface {
                 Thread JDBC5 = new Thread(new JDBCUtil5()::main);
                 Thread JDBC6 = new Thread(new JDBCUtil6()::main);
                 Thread JDBC7 = new Thread(new JDBCUtil7()::main);
+                Thread JDBC8 = new Thread(new JDBCUtil8()::main);
 
                 JDBC1.start();
                 JDBC2.start();
@@ -83,6 +84,7 @@ public class DatabaseInterface {
                 JDBC5.start();
                 JDBC6.start();
                 JDBC7.start();
+                JDBC8.start();
 
                 JDBC1.join();
                 JDBC2.join();
@@ -91,9 +93,6 @@ public class DatabaseInterface {
                 JDBC5.join();
                 JDBC6.join();
                 JDBC7.join();
-                */
-                Thread JDBC8 = new Thread(new JDBCUtil8()::main);
-                JDBC8.start();
                 JDBC8.join();
 
                 done();

@@ -6,7 +6,6 @@ import com.datascience.bigmovie.base.models.Question;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science
@@ -31,6 +30,7 @@ public class DatabaseQuery {
 
     /**
      * Run the query
+     * We check if its an R question, since R questions dont have Database queries in them
      */
     private Answer runQuery(Question question) throws IOException, SQLException {
         ArrayList<String[]> results = new ArrayList<>();
@@ -42,8 +42,6 @@ public class DatabaseQuery {
                 connection.setAutoCommit(false);
                 Statement statement = connection.createStatement();
                 ResultSet rs = statement.executeQuery(query);
-
-                // Temp array list to store query results
 
                 int columnCount = rs.getMetaData().getColumnCount();
                 while (rs.next()) {

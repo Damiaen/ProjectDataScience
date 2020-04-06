@@ -21,7 +21,7 @@ public class ParserInterface{
 
     private Parser parser = Parser.getInstance();
 
-    public ParserInterface(){
+    ParserInterface() {
         // Create required elements for the JFrame
         createInterfaceElements();
 

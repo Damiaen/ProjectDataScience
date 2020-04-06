@@ -4,7 +4,6 @@ import com.datascience.bigmovie.base.models.Answer;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science

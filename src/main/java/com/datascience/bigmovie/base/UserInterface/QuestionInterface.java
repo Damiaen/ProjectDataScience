@@ -3,6 +3,8 @@ package com.datascience.bigmovie.base.UserInterface;
 import com.datascience.bigmovie.base.Logic.QuestionContentBuilder;
 import com.datascience.bigmovie.base.Logic.QuestionGraphBuilder;
 import com.datascience.bigmovie.base.models.Answer;
+import org.knowm.xchart.*;
+import org.knowm.xchart.style.Styler;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -13,9 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import org.knowm.xchart.*;
-import org.knowm.xchart.style.Styler;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science
@@ -38,7 +37,7 @@ public class QuestionInterface {
     /**
      * Requires an question
      */
-    public QuestionInterface(Answer answer) throws IOException {
+    QuestionInterface(Answer answer) throws IOException {
         // Assign question data to the local question variable
         this.answer = answer;
         // Create required base elements for the JFrame
