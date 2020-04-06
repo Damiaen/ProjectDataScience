@@ -1,4 +1,4 @@
-package com.datascience.bigmovie.base.models;
+package com.datascience.bigmovie.base.Models;
 
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science

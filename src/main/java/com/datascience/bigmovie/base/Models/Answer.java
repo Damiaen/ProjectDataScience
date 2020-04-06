@@ -1,4 +1,4 @@
-package com.datascience.bigmovie.base.models;
+package com.datascience.bigmovie.base.Models;
 
 import java.util.ArrayList;
 

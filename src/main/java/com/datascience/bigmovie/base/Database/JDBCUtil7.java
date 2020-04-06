@@ -25,8 +25,7 @@ public class JDBCUtil7 extends JDBCUtilMaster {
             PreparedStatement statement = connection.prepareStatement(sql);
 
             BufferedReader lineReader = new BufferedReader(new FileReader(csvFilePath));
-            String lineText = null;
-            int count = 0;
+            String lineText;
 
             lineReader.readLine(); // skip header line
 

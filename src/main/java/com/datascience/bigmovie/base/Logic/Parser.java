@@ -1,9 +1,8 @@
 package com.datascience.bigmovie.base.Logic;
 
-import com.datascience.bigmovie.base.models.Column;
+import com.datascience.bigmovie.base.Models.Column;
 
 import java.io.*;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,40 +13,41 @@ import java.util.StringTokenizer;
  */
 public class Parser {
 
-    private static Parser instance = null;
+    private static Parser instance;
 
     private static List<Column> columnsList = new ArrayList<>();
 
     /**
      * Private Constructor prevents any other class from instantiating.
      */
-    private Parser() {}
+    private Parser() {
+        // All names and info
+        columnsList.add(new Column("name.basics.tsv/data", "NameBasics", new Integer[]{5}, new Integer[]{}));
+        // Movie title also know as
+        columnsList.add(new Column("title.akas.tsv/data", "TitleAKAS", new Integer[]{}, new Integer[]{}));
+        // Movie title basics
+        columnsList.add(new Column("title.basics.tsv/data", "TitleBasics", new Integer[]{}, new Integer[]{}));
+        // Amount of seasons and episodes
+        columnsList.add(new Column("title.episode.tsv/data", "Episodes", new Integer[]{}, new Integer[]{}));
+        // Movie roles and data
+        columnsList.add(new Column("title.principals.tsv/data", "Principals", new Integer[]{4,5}, new Integer[]{}));
+        // Ratings for the movie/show
+        columnsList.add(new Column("title.ratings.tsv/data", "Ratings", new Integer[]{}, new Integer[]{}));
+        //know for movies data
+        columnsList.add(new Column("name.basics.tsv/data", "TitlesKnowFor", new Integer[]{1,2,3,4}, new Integer[]{}));
+        // Crew data
+        columnsList.add(new Column("title.crew.tsv/data", "crewData", new Integer[]{2}, new Integer[]{}));
+    }
 
     /**
      * Define the new csv files here, all data files, requires dataSource, newFileName, IgnoredColumns and SplitColumns
      * IgnoredColumns and SplitColumns are based on an integer array, given integers will be used as indexes.
      * If no value is given for any of the integer arrays it will parse all the data.
      */
-    public static Parser getInstance()
+    public static Parser Instance()
     {
         if (instance == null)  {
             instance = new Parser();
-            // All names and info
-            columnsList.add(new Column("name.basics.tsv/data", "NameBasics", new Integer[]{5}, new Integer[]{}));
-            // Movie title also know as
-            columnsList.add(new Column("title.akas.tsv/data", "TitleAKAS", new Integer[]{}, new Integer[]{}));
-            // Movie title basics
-            columnsList.add(new Column("title.basics.tsv/data", "TitleBasics", new Integer[]{}, new Integer[]{}));
-            // Amount of seasons and episodes
-            columnsList.add(new Column("title.episode.tsv/data", "Episodes", new Integer[]{}, new Integer[]{}));
-            // Movie roles and data
-            columnsList.add(new Column("title.principals.tsv/data", "Principals", new Integer[]{4,5}, new Integer[]{}));
-            // Ratings for the movie/show
-            columnsList.add(new Column("title.ratings.tsv/data", "Ratings", new Integer[]{}, new Integer[]{}));
-            //know for movies data
-            columnsList.add(new Column("name.basics.tsv/data", "TitlesKnowFor", new Integer[]{1,2,3,4}, new Integer[]{}));
-            // Crew data
-            columnsList.add(new Column("title.crew.tsv/data", "crewData", new Integer[]{2}, new Integer[]{}));
         }
         return instance;
     }
@@ -173,20 +173,5 @@ public class Parser {
      */
     private static boolean checkIfDuplicateRow(String newCsvLine, String lastRowData) {
         return newCsvLine.equals(lastRowData);
-    }
-
-    /**
-     * Get file from classpath, resources folder
-     *
-     * @param fileName = name of file
-     */
-    private static File getFileFromResources(String fileName) {
-        ClassLoader classLoader = Parser.class.getClassLoader();
-        URL resource = classLoader.getResource(fileName);
-        if (resource == null) {
-            throw new IllegalArgumentException("ERROR: file not found!, is the path to the raw tsv file correct?");
-        } else {
-            return new File(resource.getFile());
-        }
     }
 }

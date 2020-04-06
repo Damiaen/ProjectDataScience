@@ -2,7 +2,7 @@ package com.datascience.bigmovie.base.UserInterface;
 
 import com.datascience.bigmovie.base.Logic.QuestionContentBuilder;
 import com.datascience.bigmovie.base.Logic.QuestionGraphBuilder;
-import com.datascience.bigmovie.base.models.Answer;
+import com.datascience.bigmovie.base.Models.Answer;
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.Styler;
 
@@ -30,8 +30,6 @@ public class QuestionInterface {
     private JButton openExplorer;
 
     private JFrame questionInterfaceFrame = new JFrame("Project DataScience - Groep 4 - Ask Question");
-    private QuestionContentBuilder questionContentBuilder = new QuestionContentBuilder();
-    private QuestionGraphBuilder questionGraphBuilder = new QuestionGraphBuilder();
     private Answer answer;
 
     /**
@@ -98,7 +96,7 @@ public class QuestionInterface {
         chart.getStyler().setXAxisLabelRotation(90);
 
         // Get cleaned params from data, each questions has own function to return clean data
-        ArrayList<String[]> pieChartParameters = questionGraphBuilder.buildGraph(answer);
+        ArrayList<String[]> pieChartParameters = QuestionGraphBuilder.Instance().buildGraph(answer);
 
         // Split data into 2, firstRow is X, secondRow is Y
         ArrayList<String> firstRow = new ArrayList<>();
@@ -132,7 +130,7 @@ public class QuestionInterface {
         chart.getStyler().setCircular(false);
 
         // Get cleaned params for PieChart, each questions has own function
-        ArrayList<String[]> pieChartParameters = questionGraphBuilder.buildGraph(answer);
+        ArrayList<String[]> pieChartParameters = QuestionGraphBuilder.Instance().buildGraph(answer);
 
         // Check if not empty, else do nothing
         if (!pieChartParameters.isEmpty()) {
@@ -185,7 +183,7 @@ public class QuestionInterface {
      * Build the answer content, content is based on unique id of question/answer
      */
     private String buildAnswerContent() {
-        String finalContent = questionContentBuilder.buildAnswer(answer);
+        String finalContent = QuestionContentBuilder.Instance().buildAnswer(answer);
         System.out.println("Final content string: " + finalContent);
         return finalContent;
     }

@@ -19,7 +19,6 @@ public class ParserInterface{
 
     private JFrame parserInterfaceFrame = new JFrame("Project DataScience - Groep 4 - Parser");
 
-    private Parser parser = Parser.getInstance();
 
     ParserInterface() {
         // Create required elements for the JFrame
@@ -70,7 +69,7 @@ public class ParserInterface{
         new SwingWorker<Void, String>() {
             @Override
             protected Void doInBackground() throws Exception {
-                parser.runParser();
+                Parser.Instance().runParser();
                 return null;
             }
 

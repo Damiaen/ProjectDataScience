@@ -1,7 +1,7 @@
 package com.datascience.bigmovie.base.Database;
 
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -12,12 +12,9 @@ import java.sql.Statement;
 class JDBCUtilMaster
 {
     //enter database connection settings here
-
-    String jdbcURL = "jdbc:postgresql://localhost:5432/postgres";
+    String jdbcURL = "jdbc:postgresql://localhost:5432/movieDB";
     String username = "postgres";
-    String password = "1234";
-
-    int batchSize = 20;
+    String password = "";
 
     void DisableFKChecks(Connection connection,String table) throws SQLException {
         //foreign key checks uitzetten
@@ -29,7 +26,7 @@ class JDBCUtilMaster
     void EnableFKChecks(Connection connection,String table) throws SQLException {
         //en weer aanzetten..
         Statement stmt = connection.createStatement();
-        stmt.execute("ALTER TABLE "+table+" DISABLE TRIGGER ALL;");
+        stmt.execute("ALTER TABLE "+table+" ENABLE TRIGGER ALL;");
         stmt.close();
     }
 }

@@ -1,7 +1,7 @@
 package com.datascience.bigmovie.base.Logic;
 
-import com.datascience.bigmovie.base.models.Answer;
-import com.datascience.bigmovie.base.models.Question;
+import com.datascience.bigmovie.base.Models.Answer;
+import com.datascience.bigmovie.base.Models.Question;
 
 import java.io.IOException;
 import java.sql.*;
@@ -12,9 +12,9 @@ import java.util.ArrayList;
  */
 public class DatabaseQuery {
 
-    private final String jdbcURL = "jdbc:postgresql://localhost:5432/postgres";
+    private final String jdbcURL = "jdbc:postgresql://localhost:5432/movieDB";
     private final String username = "postgres";
-    private final String password = "1234";
+    private final String password = "";
 
     /**
      * Get the question and run the query

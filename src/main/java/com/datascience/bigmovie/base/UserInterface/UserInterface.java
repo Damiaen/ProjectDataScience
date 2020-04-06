@@ -1,8 +1,8 @@
 package com.datascience.bigmovie.base.UserInterface;
 
 import com.datascience.bigmovie.base.Logic.DatabaseQuery;
-import com.datascience.bigmovie.base.models.Answer;
-import com.datascience.bigmovie.base.models.Question;
+import com.datascience.bigmovie.base.Models.Answer;
+import com.datascience.bigmovie.base.Models.Question;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

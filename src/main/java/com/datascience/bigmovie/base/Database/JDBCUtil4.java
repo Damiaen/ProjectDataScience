@@ -23,9 +23,7 @@ public class JDBCUtil4 extends JDBCUtilMaster {
             PreparedStatement statement = connection.prepareStatement(sql);
 
             BufferedReader lineReader = new BufferedReader(new FileReader(csvFilePath));
-            String lineText = null;
-
-            int count = 0;
+            String lineText;
 
             lineReader.readLine(); // skip header line
 
@@ -49,9 +47,7 @@ public class JDBCUtil4 extends JDBCUtilMaster {
 
                 statement.addBatch();
 
-                if (count % batchSize == 0) {
-                    statement.executeBatch();
-                }
+                statement.executeBatch();
             }
             System.out.println("Done with Principals");
             lineReader.close();

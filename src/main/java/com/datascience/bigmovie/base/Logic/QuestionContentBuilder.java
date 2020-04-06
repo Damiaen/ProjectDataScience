@@ -1,6 +1,6 @@
 package com.datascience.bigmovie.base.Logic;
 
-import com.datascience.bigmovie.base.models.Answer;
+import com.datascience.bigmovie.base.Models.Answer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,9 +8,18 @@ import java.util.ArrayList;
 /**
  * @author Damiaen Toussaint, team 4,  Project Data Science
  */
-public class QuestionContentBuilder {
-
+public class QuestionContentBuilder
+{
     private StringBuilder stringBuilder = new StringBuilder();
+    private static QuestionContentBuilder instance;
+
+    public static QuestionContentBuilder Instance()
+    {
+        if (instance == null)  {
+            instance = new QuestionContentBuilder();
+        }
+        return instance;
+    }
 
     /**
      * Get the question and run the query

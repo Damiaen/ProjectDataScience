@@ -1,6 +1,6 @@
 package com.datascience.bigmovie.base.Logic;
 
-import com.datascience.bigmovie.base.models.Answer;
+import com.datascience.bigmovie.base.Models.Answer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,6 +11,16 @@ import java.util.ArrayList;
  * Class: We clean the question data based on question id, so the graphs will work
  */
 public class QuestionGraphBuilder {
+
+    private static QuestionGraphBuilder instance;
+
+    public static QuestionGraphBuilder Instance()
+    {
+        if (instance == null)  {
+            instance = new QuestionGraphBuilder();
+        }
+        return instance;
+    }
 
     /**
      * Get the question and run the query

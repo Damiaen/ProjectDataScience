@@ -20,8 +20,7 @@ public class JDBCUtil extends JDBCUtilMaster {
             PreparedStatement statement = connection.prepareStatement(sql);
 
             BufferedReader lineReader = new BufferedReader(new FileReader(csvFilePath));
-            String lineText = null;
-            int count = 0;
+            String lineText;
 
             lineReader.readLine(); // skip header line
 
@@ -32,27 +31,24 @@ public class JDBCUtil extends JDBCUtilMaster {
                 String primaryName = data[1];
                 String birthYear = data[2];
                 String deathYear = data[3];
-                String primaryProfessions = data[4];
+                StringBuilder primaryProfessions = new StringBuilder(data[4]);
                 for(int i = 5; i < data.length; i++)
                 {
-                    int strLength = primaryProfessions.length()+data[i].length();
-                    primaryProfessions = primaryProfessions + "," + data[i];
+                    primaryProfessions.append(",").append(data[i]);
                 }
                 id = id.replaceAll("\"","");
                 primaryName = primaryName.replaceAll("\"","");
                 birthYear = birthYear.replaceAll("\"","");
                 deathYear = deathYear.replaceAll("\"","");
-                primaryProfessions = primaryProfessions.replaceAll("\"","");
+                primaryProfessions = new StringBuilder(primaryProfessions.toString().replaceAll("\"", ""));
                 statement.setString(1, id);
                 statement.setString(2, primaryName);
                 BirthYearNullCheck(statement, birthYear, deathYear);
-                statement.setString(5, primaryProfessions);
+                statement.setString(5, primaryProfessions.toString());
 
                 statement.addBatch();
 
-                if (count % batchSize == 0) {
-                    statement.executeBatch();
-                }
+                statement.executeBatch();
             }
             System.out.println("Done with Persons");
             lineReader.close();

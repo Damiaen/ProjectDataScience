@@ -3,11 +3,16 @@ package com.datascience.bigmovie.base.Database;
 import java.io.*;
 import java.sql.*;
 
+/**
+ * @author Mathijs Grafhorst, team 4,  Project Data Science
+ */
+
 public class JDBCUtil8 extends JDBCUtilMaster {
 
     public void main() {
 
         String csvFilePath = "src/main/resources/database/csv/crewData.csv";
+
 
         Connection connection = null;
 
@@ -18,18 +23,18 @@ public class JDBCUtil8 extends JDBCUtilMaster {
             DisableFKChecks(connection,"crew");
 
             connection.setAutoCommit(false);
+
             String sql = "INSERT INTO crew (titleId, directorsid) VALUES (?, ?)";
+
             PreparedStatement statement = connection.prepareStatement(sql);
 
             BufferedReader lineReader = new BufferedReader(new FileReader(csvFilePath));
-            String lineText = null;
-
-            int count = 0;
+            String lineText;
 
             lineReader.readLine(); // skip header line
 
             while ((lineText = lineReader.readLine()) != null) {
-                //ervoor zorgen dat hij uitzondering maakt voor "," in de tekst
+
                 String[] data = lineText.split(",", -1);
                 String titleId = data[0];
                 for (int i = 1; i < data.length; i++ ) {
@@ -48,9 +53,9 @@ public class JDBCUtil8 extends JDBCUtilMaster {
                 }
                 statement.executeBatch();
             }
+
             System.out.println("Done with crew");
             lineReader.close();
-
             // execute the remaining queries
             statement.executeBatch();
 
@@ -75,3 +80,4 @@ public class JDBCUtil8 extends JDBCUtilMaster {
 
     }
 }
+
